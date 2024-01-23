@@ -1,0 +1,1 @@
+{"version":3,"file":"index.css","mappings":";;;AAAA;EACI;EACA;EACA;AACJ,C","sources":["webpack://form/./src/editor.scss"],"sourcesContent":[".wp-block-nc-form {\r\n    min-height: 0!important;\r\n    margin-top: 28px!important;\r\n    margin-bottom: 28px!important;\r\n}\r\n"],"names":[],"sourceRoot":""}

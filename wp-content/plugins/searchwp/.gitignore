@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+.vscode
+/yarn-error.log
+/vendor
+/vendor-bin
+wordpress/
+composer.phar
+php-scoper.phar

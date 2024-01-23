@@ -1,0 +1,36 @@
+/* Éléments */
+
+#elementor-panel-page-elements #elementor-panel-elements-navigation, /* Onglets */
+#elementor-panel-page-elements #elementor-panel-elements-search-area, /* Recherche */
+#elementor-panel-page-elements #elementor-panel-category-basic, /* Widgets "BASIQUE" */
+#elementor-panel-page-elements #elementor-panel-category-pro-elements, /* Widgets "PRO" */
+#elementor-panel-page-elements #elementor-panel-category-general, /* Widgets "GÉNÉRAL" */
+#elementor-panel-page-elements #elementor-panel-category-theme-elements, /* Widgets "SITE" */
+#elementor-panel-page-elements #elementor-panel-category-woocommerce-elements, /* Widgets "WOOCOMMERCE" */
+#elementor-panel-page-elements #elementor-panel-get-pro-elements { /* Mettre à niveau */
+    display: none;
+}
+
+/* Réglages */
+
+#elementor-panel-page-settings .elementor-tab-control-advanced {
+    display: none;
+}
+
+/* Menu */
+
+#elementor-panel-page-menu .elementor-panel-menu-item-notes {
+    display: none;
+}
+
+/* Notice */
+
+#elementor-preview #e-notice-bar {
+    display: none;
+}
+
+/* Bibliothèque */
+
+.elementor-template-library-pro-template {
+    display: none!important;
+}

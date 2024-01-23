@@ -1,0 +1,10 @@
+deploy_production:
+  stage: deploy
+  environment: Production
+  only:
+    - master
+  script:
+    - pwd
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e ssh -o StrictHostKeyChecking=no $USER@172.16.5.26 'cd public_html/ && git checkout master && git clean -fd && git pull origin master && exit'

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "nc/accordion",
+  "version": "0.1.0",
+  "title": "Accordéon",
+  "category": "design",
+  "icon": "editor-justify",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "accordion",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "id": {
+      "type": "integer"
+    }
+  },
+  "providesContext": {
+    "nc-accordion/id": "id"
+  }
+}

@@ -1,0 +1,9 @@
+.wp-block-nc-slider-image figure {
+  margin: 0 15px 15px 15px;
+  width: 250px;
+}
+.wp-block-nc-slider-image figure .components-resizable-box__handle {
+  display: none !important;
+}
+
+/*# sourceMappingURL=editor.css.map */

@@ -1,0 +1,46 @@
+#AuthName "Protected"
+#AuthType Basic
+#AuthUserFile PATH_TO_HTPASSWD_FILE/.htpasswd
+#<RequireAny>
+    #Require ip 109.3.211.150
+    #Require ip 127.0.0.1
+    #Require ip 94.23.35.34 # RGAA
+    #Require ip SERVER_IP
+    #Require valid-user
+#</RequireAny>
+
+#Header set Cache-Control "max-age=3600, no-cache"
+
+# Moteur de recherche
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # On bloque si il y a un paramètre "s" et pas de paramètre "s_favorites=1"
+    RewriteCond %{REQUEST_URI} !^/wp-admin/ [NC]
+    RewriteCond %{QUERY_STRING} (^|&)s=.*(&|$) [NC]
+    RewriteCond %{QUERY_STRING} !&s_favorites=1(&|$) [NC]
+    RewriteRule .* - [F,L]
+
+    # On bloque si il y a un paramètre "s" et qu'il y a un paramètre "s_remember"
+    RewriteCond %{REQUEST_URI} !^/wp-admin/ [NC]
+    RewriteCond %{QUERY_STRING} (^|&)s=.*(&|$) [NC]
+    RewriteCond %{QUERY_STRING} s_remember= [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# BEGIN WordPress
+# Les directives (lignes) entre « BEGIN WordPress » et « END WordPress » sont générées
+# dynamiquement, et doivent être modifiées uniquement via les filtres WordPress.
+# Toute modification des directives situées entre ces marqueurs sera surchargée.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress

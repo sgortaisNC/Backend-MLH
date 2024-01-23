@@ -1,0 +1,16 @@
+.wp-block-nc-slider {
+    min-height: 0!important;
+    margin-top: 28px!important;
+    margin-bottom: 28px!important;
+    border: 1px solid black;
+    padding-top: 15px;
+
+    label {
+      margin-left: 15px;
+    }
+
+    .block-editor-block-list__layout {
+        display: flex;
+        flex-flow: row wrap;
+    }
+}

@@ -1,0 +1,8 @@
+.wp-block-nc-featured-image figcaption {
+  display: none;
+}
+.wp-block-nc-featured-image .components-resizable-box__handle {
+  display: none !important;
+}
+
+/*# sourceMappingURL=editor.css.map */
