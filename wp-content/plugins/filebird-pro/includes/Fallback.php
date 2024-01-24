@@ -15,7 +15,9 @@ add_action(
     </p>
 </div>
 <?php
+			//phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( isset( $_GET['activate'] ) ) {
+				//phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				unset( $_GET['activate'] );
 			}
 		}

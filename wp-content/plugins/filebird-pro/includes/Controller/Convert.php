@@ -8,7 +8,6 @@ defined( 'ABSPATH' ) || exit;
  */
 
 class Convert {
-
 	private static $folder_table   = 'fbv';
 	private static $relation_table = 'fbv_attachment_folder';
 	public function __construct() {
@@ -55,9 +54,9 @@ class Convert {
 			}
 			//update new_fbv_id for this term
 			update_term_meta( $folder->id, 'new_fbv_id', $insert_id );
-
 		}
 	}
+
 	private static function setFolder( $ids, $folder, $delete_first = false ) {
 		global $wpdb;
 		if ( is_numeric( $ids ) ) {

@@ -10,6 +10,10 @@ use FileBird\Install;
  * Plugin activate/deactivate logic
  */
 class Plugin {
+	public function __construct() {
+        self::prepareRun();
+	}
+
 	public static function prepareRun() {
 		$current_version = get_option( 'fbv_version' );
 		if ( version_compare( NJFB_VERSION, $current_version, '>' ) ) {

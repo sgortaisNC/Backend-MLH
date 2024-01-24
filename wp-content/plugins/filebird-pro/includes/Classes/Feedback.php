@@ -17,6 +17,6 @@ class Feedback {
     }
 
     public function form_feedback() {
-         echo '<div id="fbv-feedback"></div>';
+         echo '<div id="fbv-feedback" style="display: none"></div>';
     }
 }

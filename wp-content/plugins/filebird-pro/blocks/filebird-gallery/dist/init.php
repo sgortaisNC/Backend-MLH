@@ -30,10 +30,10 @@ function filebird_gallery_block_assets() {
 	register_block_type(
 		'filebird/block-filebird-gallery',
 		array(
-			'editor_script'   => 'filebird_gallery-block-js',
-			'render_callback' => 'filebird_gallery_render',
-			'editor_style'    => 'filebird_gallery-block-css',
-			'attributes'      => array(
+			'editor_script_handles' => array( 'filebird_gallery-block-js' ),
+			'render_callback'       => 'filebird_gallery_render',
+			'editor_style'          => 'filebird_gallery-block-css',
+			'attributes'            => array(
 				'selectedFolder'   => array(
 					'type'    => 'array',
 					'default' => array(),
@@ -159,6 +159,7 @@ function filebird_gallery_render( $attributes ) {
 		$ulClass .= ' layout-masonry';
 	}
 
+	$ulClass .= ! empty( $attributes['className'] ) ? ' ' . esc_attr( $attributes['className'] ) : '';
 	$ulClass .= ' columns-' . esc_attr( $attributes['columns'] );
 	$ulClass .= $attributes['isCropped'] ? ' is-cropped' : '';
 
@@ -194,8 +195,8 @@ function filebird_gallery_render( $attributes ) {
 				break;
 		}
 
-		$img  = '<img src="' . esc_attr( $imageSrc ) . '" alt="' . $imageAlt . '"';
-		$img .= 'class="' . "wp-image-{$post->ID}" . '"/>';
+		$img  = '<img src="' . esc_attr( $imageSrc ) . '" alt="' . esc_html( $imageAlt ) . '"';
+		$img .= ' class="' . "wp-image-{$post->ID}" . '"/>';
 
 		$li  = '<li class="blocks-gallery-item">';
 		$li .= '<figure>';
@@ -224,7 +225,8 @@ function filebird_gallery_render( $attributes ) {
 		wp_enqueue_script( 'filebird-gallery' );
 	}
 
-	wp_enqueue_style('filebird_gallery-block-css');
+	wp_enqueue_style( 'wp-block-gallery' );
+	wp_enqueue_style( 'filebird_gallery-block-css' );
 	return $html;
 }
 

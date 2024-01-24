@@ -1,15 +1,15 @@
 <?php
 namespace FileBird\Support;
 
-use FileBird\Controller\Folder;
+use FileBird\Classes\Core;
 
 defined( 'ABSPATH' ) || exit;
 
 class PageBuilders {
-	protected $folderController;
+	protected $core;
 
 	public function __construct() {
-		$this->folderController = Folder::getInstance();
+		$this->core = Core::getInstance();
 		add_action( 'init', array( $this, 'prepareRegister' ) );
 	}
 
@@ -50,6 +50,11 @@ class PageBuilders {
 			$this->registerForFusion();
 		}
 
+		// Avada Theme
+		if ( ! class_exists( 'Fusion_Builder_Front' ) && defined( 'AVADA_VERSION' ) ) {
+			$this->registerAvada();
+		}
+
 		// Oxygen Builder
 		if ( defined( 'CT_VERSION' ) ) {
 			$this->registerOxygenBuilder();
@@ -69,10 +74,49 @@ class PageBuilders {
 		if ( defined( 'THEMIFY_VERSION' ) && class_exists( 'Themify_Builder_Model' ) ) {
 			$this->registerThemify();
 		}
+
+		// Bricks
+		if ( defined( 'BRICKS_VERSION' ) ) {
+			$this->registerBricksBuilder();
+		}
+
+		// BeTheme
+		if ( defined( 'MFN_THEME_VERSION' ) ) {
+			$this->registerBeBuilder();
+		}
+
+		// LearnPress
+		if ( class_exists( 'LP_Addon_Frontend_Editor_Preload' ) ) {
+			$this->registerLearnPress();
+		}
+
+		// Break Dance Builder
+		if ( defined( '__BREAKDANCE_VERSION' ) ) {
+			$this->registerBreakDance();
+		}
+
+		// YooTheme
+		if ( class_exists( 'YOOtheme\Builder' ) ) {
+			$this->registerYooTheme();
+		}
 	}
 
-	public function enqueueScripts() {
-		$this->folderController->enqueueAdminScripts( 'pagebuilders' );
+	public function enqueueScripts( $is_enqueue_media = false, $is_enqueue_footer = false ) {
+		if ( $is_enqueue_media ) {
+			wp_enqueue_media();
+
+        }
+
+		if ( $is_enqueue_footer ) {
+			add_action(
+                'wp_footer',
+                function() {
+					$this->core->enqueueAdminScripts( 'pagebuilders' );
+				}
+            );
+		}
+
+		$this->core->enqueueAdminScripts( 'pagebuilders' );
 	}
 
 	public function registerForElementor() {
@@ -80,7 +124,12 @@ class PageBuilders {
 	}
 
 	public function registerForBeaver() {
-		add_action( 'fl_before_sortable_enqueue', array( $this, 'enqueueScripts' ) );
+		add_action(
+            'fl_before_sortable_enqueue',
+            function() {
+				$this->enqueueScripts( false, true );
+			}
+		);
 	}
 
 	public function registerForBrizy() {
@@ -130,9 +179,47 @@ class PageBuilders {
 	}
 
 	public function registerThemify() {
-		if ( ( is_admin() === true && \Themify_Builder_Model::hasAccess() ) || \Themify_Builder_Model::is_frontend_editor_page() ) {
-			wp_enqueue_media();
-			add_action( 'themify_body_end', array( $this, 'enqueueScripts' ) );
+		add_action(
+             'wp_ajax_tb_load_editor',
+            function() {
+				$this->enqueueScripts( true );
+			},
+            9
+		);
+	}
+
+	public function registerBricksBuilder() {
+		if ( function_exists( 'bricks_is_builder' ) && \bricks_is_builder() ) {
+			add_action( 'bricks_after_footer', array( $this, 'enqueueScripts' ) );
 		}
+	}
+
+	public function registerAvada() {
+		add_action( 'fusion_enqueue_live_scripts', array( $this, 'enqueueScripts' ) );
+	}
+
+	public function registerBeBuilder() {
+		if ( is_admin() ) {
+			add_action(
+				'mfn_footer_enqueue',
+				function() {
+					$this->enqueueScripts();
+				}
+			);
+		}
+	}
+
+	public function registerLearnPress() {
+		add_action( 'learnpress/addons/frontend_editor/enqueue_scripts', array( $this, 'enqueueScripts' ) );
+	}
+
+	public function registerBreakDance() {
+		if ( isset( $_GET['breakdance_wpuiforbuilder_media'] ) && $_GET['breakdance_wpuiforbuilder_media'] ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScripts' ), 9 );
+		}
+	}
+
+	public function registerYooTheme() {
+		add_action( 'admin_print_footer_scripts-yootheme_customizer', array( $this, 'enqueueScripts' ) );
 	}
 }

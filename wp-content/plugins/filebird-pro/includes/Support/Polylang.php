@@ -1,7 +1,6 @@
 <?php
 namespace FileBird\Support;
 
-use FileBird\Model\Folder as FolderModel;
 use FileBird\Controller\Controller;
 
 defined( 'ABSPATH' ) || exit;
@@ -24,26 +23,100 @@ class Polylang extends Controller {
 				if ( $this->lang_id != null ) {
 					add_filter( 'fbv_speedup_get_count_query', '__return_true' );
 				}
-				add_action( 'pll_translate_media', array( $this, 'duplicateAttachmentToFolder' ), 10, 3 );
+				add_action( 'fbv_ids_assigned_to_folder', array( $this, 'assigned_to_folder' ), 10, 2 );
 				add_filter( 'fbv_get_count_query', array( $this, 'fbv_get_count_query' ), 10, 3 );
 				add_filter( 'fbv_all_folders_and_count', array( $this, 'all_folders_and_count_query' ), 10, 2 );
-				add_filter( 'fbv_pll_lang', array( $this, 'fbv_pll_lang' ), 10, 1 );
+				add_filter( 'fbv_data', array( $this, 'fbv_data' ), 10, 1 );
+				add_filter( 'fbv_post_type_term_counter', array( $this, 'fbv_post_type_term_counter' ), 10, 4 );
+				add_filter( 'fbv_post_type_all_counter', array( $this, 'fbv_post_type_all_counter' ), 10, 3 );
 			}
 		}
 	}
 
-	public function get_preferred_language( $lang ) {
-		$pll_lang = PLL()->model->get_language( $lang );
-		if ( $pll_lang ) {
-			return $pll_lang->term_id;
-		}
-		return $this->lang_id;
+	public function fbv_data( $data ) {
+		$data['pll_lang'] = \pll_current_language( 'slug' );
+		$data['icl_lang'] = '';
+
+		return $data;
 	}
 
-	public function fbv_pll_lang( $lang ) {
-		if ( ! PLL_SETTINGS && ! PLL_ADMIN && PLL()->model->get_languages_list() ) {
-			return true;
+	public function fbv_post_type_term_counter( $join, $where, $groupby, $lang ) {
+		global $wpdb;
+
+		if ( empty( $lang ) ) {
+			$lang_term_taxonomy_ids = $this->all_langs_where();
+		} else {
+			$lang_term_taxonomy_ids = intval( $this->get_preferred_language( $lang ) );
 		}
+
+		$join .= " INNER JOIN {$wpdb->term_relationships} AS tr1 ON tr1.object_id = term_relationships.object_id AND tr1.term_taxonomy_id IN ($lang_term_taxonomy_ids)";
+
+		return array(
+			'join'    => $join,
+			'where'   => $where,
+			'groupby' => $groupby,
+		);
+	}
+
+	private function all_langs_where() {
+		$term_taxonomy_ids = array();
+
+		$all_langs = \pll_languages_list();
+
+		foreach ( $all_langs as $slug ) {
+			$term_taxonomy_ids[] = $this->get_preferred_language( $slug );
+		}
+
+		return implode( ',', array_map( 'intval', $term_taxonomy_ids ) );
+	}
+
+
+	public function fbv_post_type_all_counter( $query, $post_type, $lang ) {
+		global $wpdb;
+
+		if ( empty( $lang ) ) {
+			$lang_term_taxonomy_ids = $this->all_langs_where();
+		} else {
+			$lang_term_taxonomy_ids = intval( $this->get_preferred_language( $lang ) );
+		}
+
+		$query = $wpdb->prepare(
+            "SELECT COUNT(ID) 
+			FROM $wpdb->posts AS posts
+			INNER JOIN {$wpdb->prefix}term_relationships AS term_relationships ON term_relationships.object_id = posts.ID
+			WHERE posts.post_type = %s AND (posts.post_status = 'publish' OR posts.post_status = 'draft')
+			AND term_relationships.term_taxonomy_id IN ($lang_term_taxonomy_ids)
+			",
+			$post_type
+		);
+
+		return $query;
+	}
+
+	public function assigned_to_folder( $attachmentIds ) {
+		$idArr = array();
+
+		foreach ( $attachmentIds as $id ) {
+			$translatedPostIds = \pll_get_post_translations( $id );
+			foreach ( $translatedPostIds as $trid ) {
+				array_push( $idArr, intval( $trid ) );
+			}
+		}
+
+		return empty( $idArr ) ? $attachmentIds : $idArr;
+	}
+
+	public function get_preferred_language( $lang ) {
+		$pll_lang = PLL()->model->get_language( $lang );
+
+		if ( $pll_lang ) {
+			if ( version_compare( POLYLANG_VERSION, '3.4', '>=' ) ) {
+				return $pll_lang->get_tax_prop( 'language', 'term_taxonomy_id' );
+			} else {
+				return $pll_lang->term_props['language']['term_taxonomy_id'];
+			}
+		}
+		return $this->lang_id;
 	}
 
 	public function fbv_get_count_query( $q, $folder_id, $lang ) {
@@ -105,10 +178,10 @@ class Polylang extends Controller {
 		$join   = '';
 		$where  = '';
 		if ( is_null( $lang_id ) ) {
-			$select = "SELECT fbva.folder_id as folder_id, count(DISTINCT(fbva.attachment_id)) as count
+			$select = "SELECT fbva.folder_id as folder_id, count(DISTINCT(fbva.attachment_id)) as counter
                   FROM {$wpdb->prefix}fbv_attachment_folder AS fbva";
 		} else {
-			$select = "SELECT fbva.folder_id as folder_id, count(fbva.attachment_id) as count
+			$select = "SELECT fbva.folder_id as folder_id, count(fbva.attachment_id) as counter
                   FROM {$wpdb->prefix}fbv_attachment_folder AS fbva";
 			$join  .= " INNER JOIN {$wpdb->term_relationships} AS trs ON fbva.attachment_id = trs.object_id ";
 			$where .= " AND trs.term_taxonomy_id IN ({$lang_id}) ";
@@ -118,14 +191,9 @@ class Polylang extends Controller {
 		$join .= " INNER JOIN {$wpdb->posts} as posts ON posts.ID = fbva.attachment_id ";
 
 		$where .= " WHERE posts.post_type = 'attachment' AND (posts.post_status = 'inherit' OR posts.post_status = 'private') ";
-		$where .= ' AND fbv.created_by = ' . apply_filters( 'fbv_in_not_in_created_by', '0' ) . ' GROUP BY fbva.folder_id';
+		$where .= $wpdb->prepare( ' AND fbv.created_by = %d GROUP BY fbva.folder_id', apply_filters( 'fbv_folder_created_by', '0' ) );
 
 		$query = $select . $join . $where;
 		return $query;
-	}
-
-	public function duplicateAttachmentToFolder( $post_id, $tr_id, $lang_slug ) {
-		$folders_of_source = FolderModel::getFoldersOfPost( $post_id );
-		FolderModel::setFoldersForPosts( $tr_id, $folders_of_source );
 	}
 }

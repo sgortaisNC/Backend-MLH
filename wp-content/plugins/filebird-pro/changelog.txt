@@ -1,3 +1,186 @@
+Jan 19, 2024 - Version 6.0.6
+- Improved: Switching to use TailwindCSS (Remove CSS-IN-JS)
+- Improved: Performance optimization for RTL + LTR
+- Improved: Expanded folder tree doesn’t sync well in multiple screens
+- Fixed: Post Types Counter displays wrong number
+- Fixed: Some CSS 
+
+Jan 9, 2024 - Version 6.0.5
+- Fixed: Firewall blocking (Sucuri, GoDaddy, etc.)
+
+Jan 7, 2024 - Version 6.0.4
+- Added: Implement new interface UI library for Tooltip, Context Menu, animation, which is scaleable, easier for maintain and have better performance
+- Added: Missing text translation
+- Fixed: Compatible with PHP 8.2
+- Fixed: Missing “FileBird Folder” attribute on media file’s detail
+- Fixed: Listview error
+- Fixed: PostType doesn’t load posts (only ListView)
+- Fixed: Not Saving PostType in Setting
+- Fixed: Select Folder doesn’t work properly when there is no folder in PostType
+- Fixed: Remove plugin updater library, using new functionality 
+- Fixed: CSV Import not working for PHP > 8.0
+- Fixed: Small CSS bugs
+
+Dec 25, 2023 - Version 6.0.3
+- Updated: POT files, translation for German
+- Fixed: Layout of folder tree in modal (for German)
+
+Dec 22, 2023 - Version 6.0.2
+- Fixed: Compatible with WooCommerce Product Layout
+- Fixed: Compatible with ACF Custom Field
+
+Dec 21, 2023 - Version 6.0.1
+- Fixed: Support page builders
+
+Dec 21, 2023 - Version 6.0
+- New: Full compatibility of folders for pages, posts, custom post types with WPML, Polylang, etc.
+- New: SVG upload & sanitization
+- New: Each user can now experience new folder skins in different themes
+- New: Quickly display folder ID
+- New: File counter options for each user
+- New: UI/UX & icon design
+- Required: At least PHP 7.4 
+- Improved: Unstyled component
+- Improved: Smooth resizeable folder sidebar
+- Improved: Lightweight plugin bundle with minified packages
+- Improved: Faster performance
+- Improved: Smart load assets per task
+- Fixed: PHP 8.0 auto-update library
+
+Nov 28, 2023 - Version 5.5.8
+- Fixed: Compatible with Polylang latest version
+
+Nov 22, 2023 - Version 5.5.7
+- Added: Support YooTheme ver 4 and greater
+- Fixed: Conflict with ATUM Purchase Order Pro plugin (by Stock Management Labs™)
+
+Nov 13, 2023 - Version 5.5.6
+- Fixed: Sorting in WooCommerce Products
+
+Nov 8, 2023 - Version 5.5.5
+- Fixed: Compatible with WP 6.4
+- Improved: Review suggestion
+
+Oct 25, 2023 - Version 5.5.4
+- Fixed: Not show folder tree in post types
+
+Oct 24, 2023 - Version 5.5.3
+- Improved: Work with cache
+
+Aug 31, 2023 - Version 5.5.2
+- Fixed: Counter wrong in popup modal with WPML
+- Fixed: Support Betheme latest version
+- Fixed: Conflict tooltip style with Betheme builder
+- Fixed: Drag/drop attachment not working correctly (conflict with betheme builder drag/drop)
+
+Aug 23, 2023 - Version 5.5.1
+- Fixed: Error with WP 6.0.x
+
+Aug 1, 2023 - Version 5.5
+- Added: New filter for Post Types Support: filebird_post_types
+- Added: Label All Posts/Pages/Items & Logo Empty Folder
+- Added: Counter of folder on the right
+- Fixed: Tooltip of folder on the right
+- Fixed: Laggy moving
+- Improved: Logic and performance
+- Updated: POT files, updated Dutch Language
+
+Jul 7, 2023 - Version 5.4.5
+- Added: Compatible with PDF Image Generator (By Mizuho Ogino)
+- Updated: Document Link
+
+Jul 3, 2023 - Version 5.4.4
+- Added: Compatible with text block of UX builder (Theme Flatsome)
+- Fixed: Drop item when a subfolder is deleted
+- Fixed: Conpatible with Twenty twenty three theme
+
+Jun 27, 2023 - Version 5.4.3
+- Fixed: Conflict with plugin CMS Tree Page View
+- Fixed: Set folder for cropped image
+
+Jun 20, 2023 - Version 5.4.2
+- Added: Sync WPML
+
+Jun 7, 2023 - Version 5.4.1
+- Fixed: Compatible with the latest version of Beaver Builder
+- Fixed: PostType Tree keep loading with Editor Role
+
+Jun 5, 2023 - Version 5.4
+- Added: Support migrate folders from Wicked Folders plugin
+
+May 23, 2023 - Version 5.3.3
+- Fixed: Order warning
+
+May 15, 2023 - Version 5.3.2
+- Fixed: SQL security
+
+May 11, 2023 - Version 5.3.1
+- Fixed: Guide link
+
+May 5, 2023 - Version 5.3
+- Added: Options Choose user folder when import CSV (with attachments)
+- Fixed: Compatible with PHP 5.6, PHP 8.2
+- Fixed: Disable button Bulk select after moving files
+
+Apr 18, 2023 - Version 5.2
+- Added: Folders for other post types
+- Fixed: Error with layout of woo product
+- Fixed: Move files 
+- Fixed: sql_require_primary_key
+
+Apr 10, 2023 - Version 5.1.6 
+- Fixed: Sql_require_primary_key in Digital Ocean
+- Fixed: Can not active when email has plus character
+
+Mar 23, 2023 – Version 5.1.5
+- Supported: LearnPress
+- Supported: BeTheme
+- Fixed: Permission for generate-key api
+- Fixed: Gutenberg scroll folder
+
+Jan 6, 2023 - Version 5.1.4
+- Fixed: Special symbol in image alt in gallery 
+
+Jan 4, 2023 - Version 5.1.3
+- Fixed: Conflict with PHP <7.4
+
+Jan 3, 2023 - Version 5.1.2
+- Fixed: Download folder error
+
+Dec 28, 2022 – Version 5.1.1
+- Fixed and improved: Sort by file name
+
+Nov 15, 2022 – Version 5.1
+- Fixed: Import folders from WP Media Folders (by Damien Barrère)
+- Fixed: Move attachment
+
+Nov 10, 2022 – Version 5.0.9
+- Added: Import folders from WP Media Folders (by Damien Barrère)
+
+Oct 6, 2022 - Version 5.0.8
+- Fixed: Improve sort by file name
+- Fixed: Small CSS
+- Improved: Review notice (display after 3 days when activated the first time)
+- Added: Hook for not create folder when uploading
+
+Sep 16, 2022 - Version 5.0.7
+- Updated: New algorithm 
+
+Sep 12, 2022 - Version 5.0.6
+- Fixed: SVG Icon in Safari
+- Added: Notice when create/update folder fail
+- Fixed: FileBird Gallery not display image when using EWWW Image Optimizer plugin
+- Fixed: Some bugs
+
+Aug 11, 2022 - Version 5.0.5
+- Added: Support Avada Theme
+- Fixed: Bugs
+
+Aug 9, 2022 - Version 5.0.4
+- Added: Support Bricks builder
+- Fixed: Issue with wordpress.com
+- Fixed: Compatible with Themify
+
 Jul 22, 2022 - Version 5.0.3
 - Improved: Folder name sorting
 - Fixed: Import from 3rd party plugins

@@ -4,34 +4,32 @@ namespace FileBird\Model;
 defined( 'ABSPATH' ) || exit;
 
 class Folder {
-
 	private static $folder_table   = 'fbv';
 	private static $relation_table = 'fbv_attachment_folder';
 
-	public static function allFolders( $select = '*', $prepend_default = null, $arg_order_by = null ) {
+	const ALL_CATEGORIES  = -1;
+    const UN_CATEGORIZED  = 0;
+	const PREVIOUS_FOLDER = -2;
+
+	public static function allFolders( $select = '*', $prepend_default = null, $order_by = null, $order = null ) {
 		//TODO need to convert ord to number using +0
 		global $wpdb;
 
-		$where = array( 'created_by' => apply_filters( 'fbv_in_not_in_created_by', '0' ) );
-
-		$order_by = 'ord+0, id, name';
-		$order_by = apply_filters( 'fbv_order_by', $order_by );
-
+		$where      = array( 'created_by' => apply_filters( 'fbv_folder_created_by', '0' ) );
 		$conditions = array( '1 = 1' );
 		foreach ( $where as $field => $value ) {
 			$conditions[] = "`$field` = " . $value;
 		}
 		$conditions = implode( ' AND ', $conditions );
-		$sql        = "SELECT $select FROM " . self::getTable( self::$folder_table ) . ' WHERE ' . $conditions . ' ORDER BY ' . $order_by;
+		$sql        = "SELECT $select FROM " . self::getTable( self::$folder_table ) . ' WHERE ' . $conditions . ' ORDER BY `ord` ASC';
+
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
 		$folders = $wpdb->get_results( $sql );
 
-		if( $arg_order_by == 'name_asc' ) {
-			usort( $folders, [ __CLASS__, 'sort_natural_asc'] );
+		if ( 'name' === $order_by && in_array( $order, array( 'asc', 'desc' ), true ) ) {
+			usort( $folders, array( __CLASS__, "sort_natural_$order" ) );
 		}
-		if( $arg_order_by == 'name_desc' ) {
-			usort( $folders, [ __CLASS__, 'sort_natural_desc'] );
-		}
+
 		if ( is_array( $prepend_default ) ) {
 			$all                        = new \stdClass();
 			$all->{$prepend_default[0]} = -1;
@@ -45,27 +43,18 @@ class Folder {
 		}
 		return $folders;
 	}
-	private static function sort_natural_asc($a, $b) {
-		return strnatcasecmp($a->name, $b->name);
+	private static function sort_natural_asc( $a, $b ) {
+		return strnatcasecmp( $a->name, $b->name );
 	}
-	private static function sort_natural_desc($a, $b) {
-		return strnatcasecmp($a->name, $b->name) * -1;
+	private static function sort_natural_desc( $a, $b ) {
+		return strnatcasecmp( $a->name, $b->name ) * -1;
 	}
 
 	public static function countFolder() {
 		global $wpdb;
 		return intval( $wpdb->get_var( 'SELECT count(*) as c FROM ' . self::getTable( self::$folder_table ) ) );
 	}
-	public static function getRelations() {
-		global $wpdb;
-		$query     = "SELECT `attachment_id`, GROUP_CONCAT(`folder_id`) as folders FROM `{$wpdb->prefix}fbv_attachment_folder` GROUP BY `attachment_id`";
-		$relations = $wpdb->get_results( $query );
-		$res       = array();
-		foreach ( $relations as $k => $v ) {
-			$res[ $v->attachment_id ] = array_map( 'intval', explode( ',', $v->folders ) );
-		}
-		return $res;
-	}
+
 	public static function updateOrdAndParent( $id, $new_ord, $new_parent ) {
 		global $wpdb;
 		$wpdb->update(
@@ -79,27 +68,173 @@ class Folder {
 			array( '%d' )
 		);
 	}
+	public static function updateAuthor( $from_author, $to_author ) {
+		global $wpdb;
+		$wpdb->update(
+			self::getTable( self::$folder_table ),
+			array(
+				'created_by' => $to_author,
+			),
+			array( 'created_by' => $from_author ),
+			array( '%d' ),
+			array( '%d' )
+		);
+	}
+	public static function deleteByAuthor( $author ) {
+		global $wpdb;
+		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder WHERE folder_id IN (SELECT id FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author . ')' );
+		$wpdb->query( "DELETE FROM {$wpdb->prefix}fbv WHERE created_by = " . (int) $author );
+	}
+
 	public static function rawInsert( $query ) {
 		global $wpdb;
 		$wpdb->query( 'INSERT INTO ' . self::getTable( self::$folder_table ) . ' ' . $query );
 	}
+
 	public static function getFoldersOfPost( $post_id ) {
 		global $wpdb;
 		return $wpdb->get_col( 'SELECT `folder_id` FROM ' . self::getTable( self::$relation_table ) . ' WHERE `attachment_id` = ' . (int) $post_id . ' GROUP BY `folder_id`' );
 	}
+
 	public static function getFolderFromPostId( $post_id ) {
 		global $wpdb;
 
+		$created             = 0;
+		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		if ( $user_has_own_folder ) {
+			$created = get_current_user_id();
+		}
 		return $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT `folder_id`,`name` FROM {$wpdb->prefix}fbv as fbv
 				JOIN {$wpdb->prefix}fbv_attachment_folder as fbva ON fbv.id = fbva.folder_id
-				WHERE `attachment_id` = %d GROUP BY `folder_id`",
-			$post_id
+				WHERE `attachment_id` = %d AND `created_by` = %d GROUP BY `folder_id`",
+			$post_id,
+                $created
 			),
             OBJECT
             );
 	}
+
+	private static function getNestedFolder() {
+		global $wpdb;
+
+		$counterType = SettingModel::getInstance()->get( 'FOLDER_COUNTER_TYPE' );
+		$isUsed      = apply_filters( 'fbv_counter_type', $counterType ) === 'counter_file_in_folder_and_sub';
+
+		if ( ! $isUsed ) {
+			return array();
+		}
+
+		$query = $wpdb->prepare(
+            "SELECT parent,GROUP_CONCAT(id) as child 
+            FROM {$wpdb->prefix}fbv
+			WHERE created_by = %d
+			GROUP BY parent",
+        	apply_filters( 'fbv_folder_created_by', 0 )
+        );
+
+		$result       = $wpdb->get_results( $query );
+		$nestedFolder = array();
+
+		foreach ( $result as $v ) {
+			$nestedFolder[ $v->parent ] = explode( ',', $v->child );
+		}
+
+		return $nestedFolder;
+	}
+
+	private static function getNestedCountAttachments( $counters, $nestedFolder, $folder_id ) {
+		$c = 0;
+
+		if ( isset( $counters[ $folder_id ] ) ) {
+			$c = intval( $counters[ $folder_id ]->counter );
+		}
+
+		if ( ! isset( $nestedFolder[ $folder_id ] ) ) {
+			return $c;
+		}
+
+		$total = $c;
+
+		foreach ( $nestedFolder[ $folder_id ] as $folder_id => $children_id ) {
+			$total += self::getNestedCountAttachments( $counters, $nestedFolder, $children_id );
+		}
+
+		return $total;
+	}
+
+	public static function countAttachments( $lang = null ) {
+        global $wpdb;
+
+        $query = $wpdb->prepare(
+            "SELECT folder_id, count(attachment_id) as counter
+                FROM {$wpdb->prefix}posts AS `posts`
+                INNER JOIN {$wpdb->prefix}fbv_attachment_folder AS `fbva` ON (fbva.attachment_id = posts.ID AND posts.post_type = 'attachment')
+				INNER JOIN {$wpdb->prefix}fbv AS `fbv` ON (fbva.folder_id = fbv.id AND fbv.created_by = %d)
+                GROUP BY folder_id",
+                apply_filters( 'fbv_folder_created_by', 0 )
+            );
+
+		$nestedFolder = self::getNestedFolder();
+		$query        = apply_filters( 'fbv_all_folders_and_count', $query, $lang );
+
+        $counters         = $wpdb->get_results( $query, OBJECT_K );
+        $formattedCounter = array();
+		$actualCounter    = array();
+
+		foreach ( $nestedFolder as $folder_id => $counter ) {
+		    $formattedCounter[ $folder_id ] = self::getNestedCountAttachments( $counters, $nestedFolder, $folder_id );
+		}
+
+        foreach ( $counters as $counter ) {
+			$actualCounter[ $counter->folder_id ] = $counter->counter;
+        }
+
+		return array(
+			'display' => array_replace( $actualCounter, $formattedCounter ),
+			'actual'  => $actualCounter,
+		);
+    }
+
+	public static function assignFolder( int $folderId, array $attachmentIds, string $lang ) {
+        global $wpdb;
+
+        $ids = implode( ',', $attachmentIds );
+
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $cleanQuery = $wpdb->prepare(
+            "DELETE `fbva` FROM {$wpdb->prefix}fbv_attachment_folder AS `fbva`
+            INNER JOIN {$wpdb->prefix}fbv AS `fbv`
+            ON (fbva.folder_id = fbv.id AND fbv.created_by = %d)
+            WHERE attachment_id IN ({$ids})",
+            apply_filters( 'fbv_folder_created_by', 0 )
+        );
+
+        $wpdb->query( $cleanQuery );
+
+        if ( $folderId > 0 ) {
+            $prepareInsert = '';
+
+            foreach ( $attachmentIds as $attachmentId ) {
+                $prepareInsert .= "($folderId, $attachmentId),";
+            }
+
+            $prepareInsert = rtrim( $prepareInsert, ',' );
+
+            $insertQuery = "INSERT INTO {$wpdb->prefix}fbv_attachment_folder ( folder_id, attachment_id ) VALUES {$prepareInsert}";
+
+            $wpdb->query( $insertQuery );
+        }
+
+        // Clean cache in wordpress.com
+        if ( count( $attachmentIds ) > 0 ) {
+            clean_post_cache( $attachmentIds[0] );
+        }
+
+        return self::countAttachments( $lang );
+    }
+
 	public static function setFoldersForPosts( $post_ids, $folder_ids, $has_action = true ) {
 		global $wpdb;
 		if ( ! is_array( $post_ids ) ) {
@@ -108,10 +243,13 @@ class Folder {
 		if ( ! is_array( $folder_ids ) ) {
 			$folder_ids = array( $folder_ids );
 		}
+		$user_has_own_folder = get_option( 'njt_fbv_folder_per_user', '0' ) === '1';
+		$current_user_id     = get_current_user_id();
 
 		foreach ( $folder_ids as $k => $folder_id ) {
 			foreach ( $post_ids as $k2 => $post_id ) {
 				do_action( 'fbv_before_setting_folder', (int) $post_id, (int) $folder_id );
+				$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}fbv_attachment_folder WHERE `attachment_id` = %d AND `folder_id` IN (SELECT `id` FROM {$wpdb->prefix}fbv WHERE `created_by` = %d)", (int) $post_id, $user_has_own_folder ? $current_user_id : 0 ) );
 				if ( $folder_id > 0 ) {
 					$wpdb->insert(
 						self::getTable( self::$relation_table ),
@@ -126,6 +264,9 @@ class Folder {
 					do_action( 'fbv_after_set_folder', $post_id, $folder_id );
 				}
 			}
+		}
+		if ( count( $post_ids ) > 0 ) {
+			clean_post_cache( $post_ids[0] );
 		}
 	}
 	public static function detail( $name, $parent ) {
@@ -151,26 +292,34 @@ class Folder {
 		$query = 'SELECT ' . $select . ' FROM ' . self::getTable( self::$folder_table ) . " WHERE `id` = '" . (int) $folder_id . "'";
 		return $wpdb->get_row( $query );
 	}
+
+	public static function isFolderExist( $folder_id ) {
+		return self::findById( $folder_id ) !== null;
+	}
+
 	public static function updateFolderName( $new_name, $parent, $folder_id ) {
 		global $wpdb;
-		$check_name = $wpdb->get_row(
+		$exist_name = $wpdb->get_row(
             $wpdb->prepare(
 			"SELECT * FROM {$wpdb->prefix}fbv WHERE id != %d AND name = %s AND parent = %d",
                 $folder_id,
                 $new_name,
                 $parent
             )
-            );
-		if ( \is_null( $check_name ) ) {
-			$wpdb->update(
+        );
+
+		if ( \is_null( $exist_name ) ) {
+            $wpdb->update(
 				self::getTable( self::$folder_table ),
 				array( 'name' => $new_name ),
 				array( 'id' => $folder_id ),
 				array( '%s' ),
 				array( '%d' )
 			);
+
 			return true;
 		}
+
 		return false;
 	}
 	public static function updateParent( $folder_id, $new_parent ) {
@@ -205,27 +354,49 @@ class Folder {
 			self::deleteFolderAndItsChildren( $child );
 		}
 	}
+
 	public static function newFolder( $name, $parent = 0 ) {
 		global $wpdb;
-		$data = apply_filters(
-			'fbv_data_before_inserting_folder',
-			array(
-				'name'   => $name,
-				'parent' => $parent,
-				'type'   => 0,
-			)
+
+		$ord = $wpdb->get_var( $wpdb->prepare( "SELECT MAX(ord) FROM {$wpdb->prefix}fbv WHERE parent = %d AND created_by = %d", $parent, apply_filters( 'fbv_folder_created_by', 0 ) ) );
+
+		$data = array(
+			'name'       => $name,
+			'parent'     => $parent,
+			'type'       => 0,
+			'created_by' => apply_filters( 'fbv_folder_created_by', 0 ),
+			'ord'        => is_null( $ord ) ? 0 : ( intval( $ord ) + 1 ),
 		);
-		$wpdb->insert( self::getTable( self::$folder_table ), $data );
-		return $wpdb->insert_id;
+
+		$inserted = $wpdb->insert( self::getTable( self::$folder_table ), $data );
+
+		if ( $inserted ) {
+            $insertId = $wpdb->insert_id;
+
+            return array(
+                'title'      => $name,
+                'id'         => $insertId,
+                'key'        => $insertId,
+                'type'       => 0,
+                'parent'     => $parent,
+                'children'   => array(),
+                'data-count' => 0,
+                'data-id'    => $insertId,
+            );
+        }
+
+        return false;
 	}
+
 	public static function newOrGet( $name, $parent, $return_id_if_exist = true ) {
 		$check = self::detail( $name, $parent );
 		if ( is_null( $check ) ) {
 			return self::newFolder( $name, $parent );
 		} else {
-			return $return_id_if_exist ? (int) $check->id : false;
+			return $return_id_if_exist ? array( 'id' => (int) $check->id ) : false;
 		}
 	}
+
 	public static function deleteFoldersOfPost( $post_id ) {
 		global $wpdb;
 		$wpdb->delete(
@@ -270,11 +441,42 @@ class Folder {
 			JOIN {$wpdb->prefix}fbv AS fbv ON fbva.folder_id = fbv.id
 			GROUP BY attachment_id
 			HAVING FIND_IN_SET(%d, GROUP_CONCAT(created_by))",
-			apply_filters( 'fbv_in_not_in_created_by', 0 )
+			apply_filters( 'fbv_folder_created_by', 0 )
 		);
 
 		$clauses['where'] .= " AND {$wpdb->posts}.ID NOT IN ($attachment_in_folder) ";
 
 		return $clauses;
 	}
+
+	public static function delete( array $ids, $lang ) {
+        $folderColors = get_option( 'fbv_folder_colors', array() );
+
+        self::_delete( $ids, $folderColors );
+        update_option( 'fbv_folder_colors', $folderColors );
+
+        return self::countAttachments( $lang );
+    }
+
+	public static function getChildrenIds( int $id ) {
+        global $wpdb;
+
+		return $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$wpdb->prefix}fbv WHERE parent = %d", $id ) );
+    }
+
+	public static function _delete( array $ids, array $folderColors ) {
+        global $wpdb;
+
+        foreach ( $ids as $id ) {
+            $wpdb->delete( $wpdb->prefix . 'fbv', array( 'id' => $id ), array( '%d' ) );
+            $wpdb->delete( $wpdb->prefix . 'fbv_attachment_folder', array( 'folder_id' => $id ), array( '%d' ) );
+
+            if ( ! empty( $folderColors ) && isset( $folderColors[ $id ] ) ) {
+                unset( $folderColors[ $id ] );
+            }
+
+            $childrenIds = self::getChildrenIds( $id );
+            self::_delete( $childrenIds, $folderColors );
+		}
+    }
 }

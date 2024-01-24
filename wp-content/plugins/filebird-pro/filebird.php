@@ -1,17 +1,20 @@
 <?php
 /**
- * Plugin Name: FileBird
+ * Plugin Name: FileBird Pro
  * Plugin URI: https://ninjateam.org/wordpress-media-library-folders/
  * Description: Organize thousands of WordPress media files into folders/ categories at ease.
- * Version: 5.0.3
+ * Version: 6.0.6
  * Author: Ninja Team
  * Author URI: https://ninjateam.org
  * Text Domain: filebird
  * Domain Path: /i18n/languages/
  */
+
 namespace FileBird;
 
 defined( 'ABSPATH' ) || exit;
+
+$php_version_valid = \version_compare( phpversion(), '7.4', '>=' );
 
 if ( function_exists( 'FileBird\\init' ) ) {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/Fallback.php';
@@ -29,7 +32,7 @@ if ( ! defined( 'NJFB_PREFIX' ) ) {
 }
 
 if ( ! defined( 'NJFB_VERSION' ) ) {
-	define( 'NJFB_VERSION', '5.0.3' );
+	define( 'NJFB_VERSION', '6.0.6' );
 }
 
 if ( ! defined( 'NJFB_PLUGIN_FILE' ) ) {
@@ -60,6 +63,13 @@ if ( ! defined( 'NJFB_UPLOAD_DIR' ) ) {
 	define( 'NJFB_UPLOAD_DIR', 'filebird-uploads' );
 }
 
+if ( file_exists( NJFB_PLUGIN_PATH . '/vendor/autoload.php' ) && $php_version_valid ) {
+	require_once NJFB_PLUGIN_PATH . '/vendor/autoload.php';
+}
+
+if ( ! defined( 'NJFB_DEVELOPMENT' ) ) {
+	define( 'NJFB_DEVELOPMENT', false );
+}
 
 spl_autoload_register(
 	function ( $class ) {
@@ -81,20 +91,27 @@ spl_autoload_register(
 
 if ( ! function_exists( 'FileBird\\init' ) ) {
 	function init() {
-		Plugin::prepareRun();
-		I18n::loadPluginTextdomain();
-
+		new Plugin();
+		new I18n();
 		new Classes\Feedback();
 		new Classes\Review();
-		new Classes\TabActive();
-		new Page\Settings();
+		new Classes\ActivePro();
 
+		Admin\Settings::getInstance();
 		Classes\Convert::getInstance();
-		Controller\Folder::getInstance();
+		Classes\Core::getInstance();
+		Rest\RestApi::getInstance();
+		Addons\PostType\Init::getInstance();
 
+		// Support 3rd plugins
 		new Support\SupportController();
+
+		// Import from 3rd plugins
+		new Controller\Import\ImportController();
+
 		// Schedule
 		new Classes\Schedule();
+
 		// Gutenberg Blocks
 		new Blocks\BlockController();
 

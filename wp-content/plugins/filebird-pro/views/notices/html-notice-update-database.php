@@ -1,18 +1,17 @@
 <?php
 
+use FileBird\Admin\Settings;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 $update_link = add_query_arg(
     array(
-        'page'    => 'filebird-settings',
-        'tab'     => 'tools',
-        'autorun' => 'true',
+        'page' => Settings::SETTING_PAGE_SLUG . '#/tools?autorun=true',
     ),
-    admin_url( '/options-general.php' )
+    admin_url( '/admin.php' )
 );
-
 ?>
 
 <div class="notice notice-warning is-dismissible njt-fb-update-db-noti" id="njt-fb-update-db-noti">
