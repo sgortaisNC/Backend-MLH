@@ -10,7 +10,7 @@ add_action('wp_enqueue_scripts', function() {
     # wp_enqueue_style('bootstrap', get_stylesheet_directory_uri() . '/assets/css/vendor/bootstrap.min.css'); // (découpe)
 
     # Font Awesome 5.10.2
-    # wp_enqueue_style('fontawesome', get_stylesheet_directory_uri() . '/assets/css/vendor/fontawesome.min.css');
+    wp_enqueue_style('fontawesome', get_stylesheet_directory_uri() . '/assets/css/vendor/fontawesome.min.css');
 
     # select2 4.0.9
     # wp_enqueue_style('select2', get_stylesheet_directory_uri() . '/assets/css/vendor/select2.min.css');
@@ -25,6 +25,7 @@ add_action('wp_enqueue_scripts', function() {
 
     # Net.Com
     wp_enqueue_style('netcom', get_stylesheet_directory_uri() . '/assets/css/main.css');
+    wp_enqueue_script('netcom', get_stylesheet_directory_uri() . '/assets/js/ajax/alerte.js',[],'1.0',true);
     wp_enqueue_script('netcom', get_stylesheet_directory_uri() . '/assets/js/app.js');
 });
 
