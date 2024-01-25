@@ -40,15 +40,28 @@
 
 <a href="<?= get_permalink(164) ?>">Candidature spontannée</a>
 
-<?php foreach ($emplois as $emploi) : ?>
-    <article>
-        <h2><?= $emploi['titre'] ?></h2>
-        <p><?= $emploi['date'] ?></p>
-        <p><?= $emploi['metier'] ?></p>
-        <p><?= $emploi['contrat'] ?></p>
-        <a href="<?= $emploi['lien'] ?>">Lire la suite</a>
-    </article>
-<?php endforeach; ?>
+<?php if(!empty($emplois)) : ?>
+    <?php foreach ($emplois as $emploi) : ?>
+        <article>
+            <h2><?= $emploi['titre'] ?></h2>
+            <p><?= $emploi['date'] ?></p>
+
+            <?php if(!empty($emploi['reference'])) : ?>
+                <p><?= $emploi['reference'] ?></p>
+            <?php endif; ?>
+
+            <?php if(!empty($emploi['metier'])) : ?>
+                <p><?= $emploi['metier'] ?></p>
+            <?php endif; ?>
+
+            <?php if(!empty($emploi['metier'])) : ?>
+                <p><?= $emploi['contrat'] ?></p>
+            <?php endif; ?>
+
+            <a href="<?= $emploi['lien'] ?>">Lire la suite</a>
+        </article>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 <?php if (!empty($max_num_pages > 1)) : ?>
     <section class="pagination">

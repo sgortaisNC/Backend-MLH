@@ -57,12 +57,16 @@ function nc_emploi_list() {
         $emplois[get_the_ID()] = [
             'titre' => get_the_title(),
             'date' => get_the_date(),
-            'reference' => get_field('reference_offre'),
-            'contrat' => join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_contrat'), 'name')),
-            'metier' => join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'metier'), 'name')),
+            'reference' => get_field('reference_offre') ?? null,
+            'contrat' => get_the_terms(get_the_ID(), 'type_de_contrat') ?
+                join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_contrat'), 'name')) : null,
+            'metier' => get_the_terms(get_the_ID(), 'metier') ?
+                join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'metier'), 'name')) : null,
             'lien' => get_permalink(),
         ];
     }
+
+    wp_reset_postdata();
 
     render('emploi/list', [
         "emplois" => $emplois,
