@@ -26,5 +26,10 @@ add_action('wp', function() {
             remove_action('nc_content', 'nc_page_single');
             add_action('nc_content', 'nc_post_list'); # /src/controllers/post.php
         }
+
+        if (EMPLOI_LIST === get_the_ID()) {
+            remove_action('nc_content', 'nc_page_single');
+            add_action('nc_content', 'nc_emploi_list'); # /src/controllers/emploi.php
+        }
     }
 }, 1);

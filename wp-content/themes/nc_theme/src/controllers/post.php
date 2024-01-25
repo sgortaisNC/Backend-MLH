@@ -6,7 +6,7 @@ function nc_post_list() {
 
     $postsRequest = new WP_Query([
         'post_type' => 'post',
-        'posts_per_page' => 1,
+        'posts_per_page' => 12,
         'post_status' => 'publish',
         'orderby' => 'date',
         'order' => 'DESC',
@@ -18,14 +18,14 @@ function nc_post_list() {
 
         $posts[get_the_ID()] = [
             'titre' => get_the_title(),
+            'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'nc_post_list') :
+                wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_footer_member')[0]),
             'date' => get_the_date(),
             'lien' => get_permalink(),
         ];
     }
 
     wp_reset_postdata();
-
-    var_dump($postsRequest->max_num_pages);
 
     render('post/list', [
         'posts' => $posts,
