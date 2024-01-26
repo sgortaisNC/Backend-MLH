@@ -12,13 +12,14 @@ add_action('wp_enqueue_scripts', function() {
     # Font Awesome 5.10.2
     wp_enqueue_style('fontawesome', get_stylesheet_directory_uri() . '/assets/css/vendor/fontawesome.min.css');
 
-    # select2 4.0.9
-    # wp_enqueue_style('select2', get_stylesheet_directory_uri() . '/assets/css/vendor/select2.min.css');
-    # wp_enqueue_script('select2', get_stylesheet_directory_uri() . '/assets/js/vendor/select2.min.js');
+    # nice select 2
+     wp_enqueue_style('niceselect2', 'https://cdn.jsdelivr.net/npm/nice-select2@2.1.0/dist/css/nice-select2.min.css');
+     wp_enqueue_script('niceselect2', 'https://cdn.jsdelivr.net/npm/nice-select2@2.1.0/dist/js/nice-select2.min.js');
+     wp_enqueue_script('nc-select', get_stylesheet_directory_uri() . '/assets/js/select.js', [], '1.0', true);
 
     # Leaflet 1.5.1
-    # wp_enqueue_style('leaflet', get_stylesheet_directory_uri() . '/assets/css/vendor/leaflet.min.css');
-    # wp_enqueue_script('leaflet', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet.min.js');
+     wp_enqueue_style('leaflet', get_stylesheet_directory_uri() . '/assets/css/vendor/leaflet.min.css');
+     wp_enqueue_script('leaflet', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet.min.js');
 
     # tarteaucitron 1.2
     # wp_enqueue_script('tarteaucitron', get_stylesheet_directory_uri() . '/assets/js/vendor/tarteaucitron/tarteaucitron.js');
@@ -33,8 +34,10 @@ add_image_size('nc_header', 100, 100, true);
 add_image_size('nc_footer', 100, 100, true);
 add_image_size('nc_home', 100, 100, true);
 add_image_size('nc_post_list', 100, 100, true);
+add_image_size('nc_louer_list', 100, 100, true);
 add_image_size('nc_post_single', 100, 100, true);
 add_image_size('nc_page_single', 100, 100, true);
+add_image_size('nc_louer_single', 100, 100, true);
 add_image_size('nc_gutenberg', 100, 100, true);
 add_image_size('nc_elementor_quote', 100, 100, true);
 add_image_size('nc_elementor_featured', 100, 100, true);

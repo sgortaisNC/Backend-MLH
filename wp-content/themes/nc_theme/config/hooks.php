@@ -7,6 +7,7 @@ add_action('wp', function() {
     if ( get_post_type() == 'page' ) add_action('nc_content', 'nc_page_single'); # /src/controllers/page.php
     if ( get_post_type() == 'post' ) add_action('nc_content', 'nc_post_single'); # /src/controllers/post.php
     if ( get_post_type() == 'offre_emploi' ) add_action('nc_content', 'nc_emploi_single'); # /src/controllers/emploi.php
+    if ( get_post_type() == 'bien_louer' ) add_action('nc_content', 'nc_louer_single'); # /src/controllers/louer.php
 
     if ( get_post_type() == 'page' ) {
 
@@ -26,6 +27,11 @@ add_action('wp', function() {
         if (POST_LIST === get_the_ID()) {
             remove_action('nc_content', 'nc_page_single');
             add_action('nc_content', 'nc_post_list'); # /src/controllers/post.php
+        }
+
+        if (BIEN_LOUER_LIST === get_the_ID()) {
+            remove_action('nc_content', 'nc_page_single');
+            add_action('nc_content', 'nc_louer_list'); # /src/controllers/louer.php
         }
 
         if (EMPLOI_LIST === get_the_ID()) {
