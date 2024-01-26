@@ -78,3 +78,6 @@
 <?php endif; ?>
 
 <?= nc_pagination($max_num_pages) ?>
+
+<div id="map" data-marker='<?= json_encode($marker, JSON_HEX_APOS); ?>'
+     style="height: 455px"></div>

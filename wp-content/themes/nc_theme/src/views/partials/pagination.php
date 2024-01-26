@@ -13,13 +13,13 @@
         <?php if($paged != 1): ?>
             <li class="icon">
                 <a href="<?= $url ?>">
-                    <i class="fas fa-chevrons-left"></i>
+                  <<#
                 </a>
             </li>
 
             <li class="icon">
                 <a href="<?= $url . 'pg='. ($paged - 1) ?>">
-                    <i class="fas fa-arrow-left"></i>
+                    <#
                 </a>
             </li>
         <?php endif; ?>
@@ -59,12 +59,12 @@
 
         <?php if ( $paged != $max_num_pages ): ?>
             <li class="icon">
-                <a href="<?= $url . 'pg='. ($paged + 1) ?>"><i class="fas fa-arrow-right"></i></a>
+                <a href="<?= $url . 'pg='. ($paged + 1) ?>">#></a>
             </li>
 
             <li class="icon">
                 <a href="<?= $url . 'pg='. $max_num_pages ?>">
-                    <i class="fas fa-chevrons-right"></i>
+                    #>>
                 </a>
             </li>
         <?php endif ?>
