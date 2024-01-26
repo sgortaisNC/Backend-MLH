@@ -5,6 +5,7 @@
  * @var array $social
  * @var array $acces_rapide
  * @var string $coordonnees
+ * @var string $coordonneesMaps
  * @var string $menu
  *
  */
@@ -20,7 +21,7 @@
     <?php endif; ?>
 
     <?php if(!empty($coordonnees)) : ?>
-       <p><?= $coordonnees ?></p>
+        <a href="https://www.google.com/maps/search/?api=1&query=<?= $coordonneesMaps ?>" target="_blank"><?= $coordonnees ?></a>
     <?php endif; ?>
 
     <div>

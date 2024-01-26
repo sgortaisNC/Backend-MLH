@@ -24,7 +24,7 @@
         <?php endif; ?>
 
         <?php if (!empty($logo)) : ?>
-            <img src="<?= wp_get_attachment_image_url($logo['ID'], "nc_header") ?>" alt="">
+            <a href="/"><img src="<?= wp_get_attachment_image_url($logo['ID'], "nc_header") ?>" alt=""></a>
         <?php endif; ?>
 
         <?= $menu ?>

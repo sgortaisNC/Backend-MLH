@@ -31,12 +31,14 @@ function nc_footer() {
         $social["x"] = $social_networks['x'] ?? null;
     }
 
-
+    $coordonneesMaps = get_field("coordonnees_localisation", "options") ?
+        str_replace(" ", "+", get_field("coordonnees_localisation", "options")) : null;
     render('footer', [
         "logo" => get_field("logo_footer", "options") ?? null,
         "social" => $social ?? null,
         "acces_rapide" => $acces ?? null,
         "coordonnees" => get_field("coordonnees_localisation", "options") ?? null,
+        "coordonneesMaps" => $coordonneesMaps ?? null,
         "menu" => $menu ?? null,
     ]);
 }

@@ -81,7 +81,17 @@ function nc_emploi_list() {
 
 function nc_emploi_single() {
 
-    render('emploi/single', [
+    $emploi = [
+        'date' => get_the_date('d M Y', get_the_ID()),
+        'reference' => get_field('reference_offre') ?? null,
+        'contrat' => get_the_terms(get_the_ID(), 'type_de_contrat') ?
+            join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_contrat'), 'name')) : null,
+        'metier' => get_the_terms(get_the_ID(), 'metier') ?
+            join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'metier'), 'name')) : null,
+        'pdf' => get_field('pdf_presentation') ?? null,
+    ];
 
+    render('emploi/single', [
+        'emploi' => $emploi,
     ]);
 }
