@@ -18,15 +18,28 @@ add_action('wp_enqueue_scripts', function() {
      wp_enqueue_script('nc-select', get_stylesheet_directory_uri() . '/assets/js/select.js', [], '1.0', true);
 
     # Leaflet 1.5.1
-     wp_enqueue_style('leaflet', get_stylesheet_directory_uri() . '/assets/css/vendor/leaflet.min.css');
-     wp_enqueue_script('leaflet', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet.min.js');
+    if(get_post_type() === "bien_louer" || get_the_ID(BIEN_LOUER_LIST)) {
+        wp_enqueue_style('leaflet', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet/leaflet.css');
+        wp_enqueue_style('leaflet-marker-cluster', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet/marker-cluster.css');
+        wp_enqueue_style('leaflet-marker-cluster-default', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet/marker-cluster.default.css');
+        wp_enqueue_script('leaflet', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet/leaflet.min.js');
+        wp_enqueue_script('leaflet-marker-cluster', get_stylesheet_directory_uri() . '/assets/js/vendor/leaflet/marker-cluster.min.js');
+    }
 
     # tarteaucitron 1.2
     # wp_enqueue_script('tarteaucitron', get_stylesheet_directory_uri() . '/assets/js/vendor/tarteaucitron/tarteaucitron.js');
 
     # Net.Com
     wp_enqueue_style('netcom', get_stylesheet_directory_uri() . '/assets/css/main.css');
-    wp_enqueue_script('map', get_stylesheet_directory_uri() . '/assets/js/locations-map.js',[],'1.0',true);
+
+    if(get_post_type() === "bien_louer") {
+        wp_enqueue_script('netcom-map-louer', get_stylesheet_directory_uri() . '/assets/js/map/map-single.js?v=1.1.0', [], '1.0', true);
+    }
+
+    if(get_the_ID() === BIEN_LOUER_LIST) {
+        wp_enqueue_script('map', get_stylesheet_directory_uri() . '/assets/js/map/locations-map.js',[],'1.0',true);
+    }
+
     wp_enqueue_script('netcom', get_stylesheet_directory_uri() . '/assets/js/ajax/alerte.js',[],'1.0',true);
     wp_enqueue_script('netcom', get_stylesheet_directory_uri() . '/assets/js/app.js');
 });

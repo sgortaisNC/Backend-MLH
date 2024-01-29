@@ -20,7 +20,7 @@ function nc_louer_list() {
     $args = [
         'post_type' => "bien_louer",
         'post_status' => 'publish',
-        'posts_per_page' => 1,
+        'posts_per_page' => 12,
         'orderby' => 'date',
         'paged' => ( !empty($_GET['pg']) ? $_GET['pg'] : 1 ),
     ];
@@ -37,7 +37,7 @@ function nc_louer_list() {
     }
 
     if(!empty($_GET['ville'])){
-        $args['tax_query'][] = [
+        $args['meta_query'][] = [
             [
                 'taxonomy' => 'ville_code_postal',
                 'field' => 'term_taxonomy_id',
@@ -76,8 +76,6 @@ function nc_louer_list() {
 
     wp_reset_postdata();
 
-    var_dump($louer);
-
     render('louer/list', [
         "louer" => $louer,
         "filtres" => $filtres,
@@ -91,8 +89,21 @@ function nc_louer_list() {
 
 function nc_louer_single() {
 
-
+    $marker = [
+      'latitude' => get_field('latitude'),
+      'longitude' => get_field('longitude'),
+    ];
 
     render('louer/single', [
+        'marker' => $marker,
+        'ville' => get_the_terms(get_the_ID(), 'ville_code_postal') ?
+            join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'ville_code_postal'), 'name')) :
+            null,
+        'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
+            join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
+            null,
+        'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
+            join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
+            null,
     ]);
 }

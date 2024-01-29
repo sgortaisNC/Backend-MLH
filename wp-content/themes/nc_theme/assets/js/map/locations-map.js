@@ -1,10 +1,5 @@
 
     let carte = document.getElementById('map');
-    let events = document.getElementById('list-events');
-    let btnEvents = document.getElementById('btn-list-events');
-    let btnMap = document.getElementById('btn-map');
-    let pagination = document.querySelector('.pagination');
-
 
     if (carte) {
 
@@ -39,45 +34,6 @@
                 console.error(error);
             });
 
-
-        if (btnEvents && btnMap) {
-            btnEvents.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                setCookie('defaultView', 'events', 7);
-
-                events.style.display = 'grid';
-                carte.style.display = 'none';
-
-                if(pagination){
-                    pagination.style.display = 'block';
-                }
-
-                btnEvents.classList.add('btn--vert');
-                btnEvents.classList.remove('btn--outline');
-                btnMap.classList.remove('btn--vert');
-                btnMap.classList.add('btn--outline');
-            });
-
-            btnMap.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                setCookie('defaultView', 'map', 7);
-
-                events.style.display = 'none';
-                carte.style.display = 'block';
-
-                if(pagination){
-                    pagination.style.display = 'none';
-                }
-
-                btnMap.classList.add('btn--vert');
-                btnMap.classList.remove('btn--outline');
-                btnEvents.classList.remove('btn--vert');
-                btnEvents.classList.add('btn--outline');
-
-            });
-        }
     }
 
 

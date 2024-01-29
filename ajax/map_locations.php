@@ -21,7 +21,7 @@ $filtres['villes'] = get_terms([
 $args = [
     'post_type' => "bien_louer",
     'post_status' => 'publish',
-    'posts_per_page' => 1,
+    'posts_per_page' => -1,
     'orderby' => 'date',
     'paged' => ( !empty($_GET['pg']) ? $_GET['pg'] : 1 ),
 ];
@@ -72,7 +72,7 @@ if($louerQuery->have_posts()){
             'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
                 join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
                 null,
-            'lien' => get_permalink(),
+            'id' => get_the_ID(),
         ];
 
         ob_start();

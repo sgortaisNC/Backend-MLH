@@ -7,24 +7,35 @@
 <?php if (!empty($popup)) : ?>
     <article class="popCard">
         <?php if (!empty($popup['image'])) : ?>
-            <img src="<?= $popup['image'] ?>" alt="<?= $popup['titre'] ?>">
+            <img src="<?= $popup['image'] ?>" alt="">
         <?php endif; ?>
 
         <div>
             <?php if (!empty($popup['type'])) : ?>
-                <span class="popCard__tags"><?= $popup['type'] ?></span>
+                <span class=""><?= $popup['type'] ?></span>
             <?php endif; ?>
 
             <?php if (!empty($popup['titre'])) : ?>
-                <div class="popCard__title"><?= $popup['titre'] ?></div>
+                <h4 class=""><?= $popup['titre'] ?></h4>
             <?php endif; ?>
 
             <?php if (!empty($popup['ville'])) : ?>
-                <div class="popCard__ville"><i class="fal fa-location-dot"></i><?= $popup['ville'] ?></div>
+                <div class=""><i class="fal fa-location-dot"></i><?= $popup['ville'] ?></div>
             <?php endif; ?>
 
+            <?php if (!empty($popup['nombre_pieces'])) : ?>
+                <div class=""><?= $popup['nombre_pieces'] ?>m²</div>
+            <?php endif; ?>
 
-            <a class="stretched" href="<?= esc_html(get_permalink($popup['id'])) ?>"></a>
+            <?php if (!empty($popup['surface'])) : ?>
+                <div class=""><?= $popup['surface'] ?>m²</div>
+            <?php endif; ?>
+
+            <?php if (!empty($popup['loyer'])) : ?>
+                <div class=""><?= $popup['loyer'] ?>€</div>
+            <?php endif; ?>
+
+            <a class="stretched" href="<?= esc_html(get_permalink($popup['id'])) ?>">Voir le bien</a>
 
         </div>
 

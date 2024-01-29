@@ -33,6 +33,21 @@
         <?php endforeach; ?>
     </select>
 
+    <select name="rayon" id="">
+        <option value="">Sélectionnez un rayon</option>
+        <option value="5">5km</option>
+        <option value="10">10km</option>
+        <option value="15">15km</option>
+        <option value="20">20km</option>
+        <option value="25">25km</option>
+        <option value="30">30km</option>
+        <option value="35">35km</option>
+        <option value="40">40km</option>
+        <option value="45">45km</option>
+        <option value="50">50km</option>
+        <option value="100">100km</option>
+    </select>
+
     <input type="submit" value="Rechercher">
     <a href="<?= get_permalink(BIEN_LOUER_LIST) ?>" class="btn">Réinitialiser</a>
 
