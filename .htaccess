@@ -16,16 +16,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # On bloque si il y a un paramètre "s" et pas de paramètre "s_favorites=1"
+    # On bloque si il y a un paramètre "s" et pas de paramètre "sf=1"
     RewriteCond %{REQUEST_URI} !^/wp-admin/ [NC]
     RewriteCond %{QUERY_STRING} (^|&)s=.*(&|$) [NC]
-    RewriteCond %{QUERY_STRING} !&s_favorites=1(&|$) [NC]
+    RewriteCond %{QUERY_STRING} !&sf=1(&|$) [NC]
     RewriteRule .* - [F,L]
 
-    # On bloque si il y a un paramètre "s" et qu'il y a un paramètre "s_remember"
+    # On bloque si il y a un paramètre "s" et qu'il y a un paramètre "sr"
     RewriteCond %{REQUEST_URI} !^/wp-admin/ [NC]
     RewriteCond %{QUERY_STRING} (^|&)s=.*(&|$) [NC]
-    RewriteCond %{QUERY_STRING} s_remember= [NC]
+    RewriteCond %{QUERY_STRING} sr= [NC]
     RewriteRule .* - [F,L]
 </IfModule>
 
