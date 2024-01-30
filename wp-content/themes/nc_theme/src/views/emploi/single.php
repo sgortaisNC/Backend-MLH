@@ -42,4 +42,8 @@
     <?php the_content(); ?>
 </div>
 
+<?php if(!empty(nc_sidebar())) : ?>
+    <?= nc_sidebar() ?>
+<?php endif; ?>
+
 <a href="<?= get_permalink(EMPLOI_LIST) ?>">Liste des emplois</a>

@@ -20,4 +20,8 @@
     <?php the_content(); ?>
 </div>
 
+<?php if(!empty(nc_sidebar())) : ?>
+    <?= nc_sidebar() ?>
+<?php endif; ?>
+
 <a href="<?= get_permalink(POST_LIST) ?>">Liste des actualités</a>

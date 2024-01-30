@@ -20,7 +20,13 @@
     <?php the_content(); ?>
 
     <?php if ( has_shortcode(get_the_content(), 'forminator_form') ) : ?>
+        <a href="<?= $retour; ?>" title="Retour à la page précédente" class="btn">
+            Retour
+        </a>
+    <?php endif; ?>
 
+    <?php if(!empty(nc_sidebar())) : ?>
+        <?= nc_sidebar() ?>
     <?php endif; ?>
 
     <a href="<?= $retour; ?>" title="Retour à la page précédente">

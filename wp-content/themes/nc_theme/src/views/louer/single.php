@@ -84,4 +84,16 @@
     </div>
 <?php endif; ?>
 
+<?php if(!empty(nc_sidebar())) : ?>
+    <?= nc_sidebar() ?>
+<?php endif; ?>
+
+<a href="">Imprimer la fiche</a>
+
+<br>
+
+<a href="<?= get_permalink(CONTACT) ?>">Cette annonce vous intéresse ?</a>
+
+<br>
+
 <a href="<?= get_permalink(BIEN_LOUER_LIST) ?>">Retour</a>

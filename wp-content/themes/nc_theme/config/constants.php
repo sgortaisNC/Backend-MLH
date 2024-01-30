@@ -13,4 +13,6 @@ if ( !defined('SITEMAP') ) define('SITEMAP', 130);
 
 //Formulaires
 if ( !defined('POSTULER') ) define('POSTULER', 164);
+if ( !defined('CONTACT') ) define('CONTACT', 119);
+
 //if ( !defined('PAGE') ) define('PAGE', 'PAGE ID');
