@@ -36,7 +36,7 @@
     </div>
 <?php endif; ?>
 
-<a href="<?= get_permalink(POSTULER) ?>">Postuler</a>
+<a href="<?= get_permalink(POSTULER) ?>?reference=<?= $emploi['reference']??null ?>">Postuler</a>
 
 <div>
     <?php the_content(); ?>

@@ -13,6 +13,8 @@ if ( !defined('SITEMAP') ) define('SITEMAP', 130);
 
 //Formulaires
 if ( !defined('POSTULER') ) define('POSTULER', 164);
+if ( !defined('CANDIDATURE_SPONTANEE') ) define('CANDIDATURE_SPONTANEE', 188);
+if ( !defined('CONTACT_COMMERCIAL') ) define('CONTACT_COMMERCIAL', 191);
 if ( !defined('CONTACT') ) define('CONTACT', 119);
 
 //if ( !defined('PAGE') ) define('PAGE', 'PAGE ID');

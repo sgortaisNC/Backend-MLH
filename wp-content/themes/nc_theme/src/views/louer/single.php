@@ -92,7 +92,7 @@
 
 <br>
 
-<a href="<?= get_permalink(CONTACT) ?>">Cette annonce vous intéresse ?</a>
+<a href="<?= get_permalink(CONTACT_COMMERCIAL) ?>?reference=<?= get_field('reference_bien')??null ?>">Cette annonce vous intéresse ?</a>
 
 <br>
 

@@ -4,6 +4,7 @@
  * @var array $emplois
  * @var array $filtres
  * @var array $params
+ * @var int $max_num_pages
  *
  */
 ?>
@@ -38,7 +39,7 @@
 
 </form>
 
-<a href="<?= get_permalink(164) ?>">Candidature spontannée</a>
+<a href="<?= get_permalink(CANDIDATURE_SPONTANEE) ?>">Candidature spontannée</a>
 
 <?php if(!empty($emplois)) : ?>
     <?php foreach ($emplois as $emploi) : ?>
@@ -58,7 +59,7 @@
                 <p><?= $emploi['contrat'] ?></p>
             <?php endif; ?>
 
-            <a href="<?= $emploi['lien'] ?>">Lire la suite</a>
+            <a href="<?= $emploi['lien'] ?? null ?>">Lire la suite</a>
         </article>
     <?php endforeach; ?>
 <?php endif; ?>
