@@ -10,6 +10,13 @@ function nc_louer_list() {
         'parent' => 0,
     ]);
 
+    $filtres['nombre_piece'] = get_terms([
+        'taxonomy' => 'nombre_piece',
+        'fields' => "id=>name",
+        'hide_empty' => false,
+        'parent' => 0,
+    ]);
+
     $filtres['villes'] = get_terms([
         'taxonomy' => 'ville_code_postal',
         'fields' => "id=>name",
@@ -36,8 +43,19 @@ function nc_louer_list() {
         ];
     }
 
+    if(!empty($_GET['nombre'])){
+        $args['tax_query'][] = [
+            [
+                'taxonomy' => 'nombre_piece',
+                'field' => 'term_taxonomy_id',
+                'terms' => $_GET['nombre'],
+                'operator' => 'IN'
+            ]
+        ];
+    }
+
     if(!empty($_GET['ville'])){
-        $args['meta_query'][] = [
+        $args['tax_query'][] = [
             [
                 'taxonomy' => 'ville_code_postal',
                 'field' => 'term_taxonomy_id',
@@ -82,6 +100,7 @@ function nc_louer_list() {
         'params' => [
             'type' => (!empty($_GET['type'])) ? $_GET['type'] : null,
             'ville' => (!empty($_GET['ville'])) ? $_GET['ville'] : null,
+            'nombre' => (!empty($_GET['nombre'])) ? $_GET['nombre'] : null,
         ],
         'max_num_pages' => $louerQuery->max_num_pages,
     ]);

@@ -13,41 +13,48 @@
 
 <form action="">
 
-    <select name="type">
-        <option value="">Sélectionnez un type de logement</option>
+    <div>
+        <label for="rayon">Sélectionnez un rayon:</label>
+        <input type="range" name="rayon" id="rayon" min="5" max="100" step="5"
+               value="<?= (!empty($params['rayon'])) ? $params['rayon'] : '5' ?>">
+        <span id="rayonValue"><?= (!empty($params['rayon'])) ? $params['rayon'] : '5' ?> km</span>
+    </div>
+    <br>
+    <div>
+        <label for="type_logement">Sélectionnez un type de logement:</label>
         <?php foreach ($filtres['types'] as $id => $filtre) : ?>
-            <option value="<?= $id ?>"
-                <?= (!empty($params['type']) && $params['type'] == $id) ? 'selected="selected"' : null ?>>
-                <?= ucfirst($filtre) ?>
-            </option>
+            <input type="checkbox" id="type_logement" name="type[]" value="<?= $id ?>"
+                <?= (!empty($params['type']) && in_array($id, $params['type'])) ? 'checked' : '' ?>>
+            <label><?= ucfirst($filtre) ?></label>
         <?php endforeach; ?>
-    </select>
-
-    <select name="ville">
-        <option value="">Sélectionnez une ville</option>
-        <?php foreach ($filtres['villes'] as $id => $filtre) : ?>
-            <option value="<?= $id ?>"
-                <?= (!empty($params['ville']) && $params['ville'] == $id) ? 'selected="selected"' : null ?>>
-                <?= ucfirst($filtre) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-
-    <select name="rayon" id="">
-        <option value="">Sélectionnez un rayon</option>
-        <option value="5">5km</option>
-        <option value="10">10km</option>
-        <option value="15">15km</option>
-        <option value="20">20km</option>
-        <option value="25">25km</option>
-        <option value="30">30km</option>
-        <option value="35">35km</option>
-        <option value="40">40km</option>
-        <option value="45">45km</option>
-        <option value="50">50km</option>
-        <option value="100">100km</option>
-    </select>
-
+    </div>
+    <br>
+    <div>
+        <label for="ville">Sélectionnez une ville:</label>
+        <select name="ville" id="ville">
+            <option value="">Sélectionnez une ville</option>
+            <?php foreach ($filtres['villes'] as $id => $filtre) : ?>
+                <option value="<?= $id ?>"
+                    <?= (!empty($params['ville']) && $params['ville'] == $id) ? 'selected' : '' ?>>
+                    <?= ucfirst($filtre) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <br>
+    <div>
+        <label for="nombre">Nombre de pièces:</label>
+        <select name="nombre" id="nombre">
+            <option value="">Sélectionnez un nombre de pièce</option>
+            <?php foreach ($filtres['nombre_piece'] as $id => $filtre) : ?>
+                <option value="<?= $id ?>"
+                    <?= (!empty($params['nombre']) && $params['nombre'] == $id) ? 'selected' : '' ?>>
+                    <?= ucfirst($filtre) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <br>
     <input type="submit" value="Rechercher">
     <a href="<?= get_permalink(BIEN_LOUER_LIST) ?>" class="btn">Réinitialiser</a>
 
@@ -73,7 +80,7 @@
             <?php endif; ?>
 
             <?php if(!empty($location['surface'])) : ?>
-                <p><?= $location['surface'] ?></p>
+                <p><?= $location['surface'] ?> m²</p>
             <?php endif; ?>
 
             <?php if(!empty($location['nombre_pieces'])) : ?>
@@ -81,7 +88,7 @@
             <?php endif; ?>
 
             <?php if(!empty($location['loyer'])) : ?>
-                <p><?= $location['loyer'] ?></p>
+                <p><?= $location['loyer'] ?> €</p>
             <?php endif; ?>
 
             <?php if(!empty($location['lien'])) : ?>

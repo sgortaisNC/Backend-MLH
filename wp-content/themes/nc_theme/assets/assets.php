@@ -36,6 +36,10 @@ add_action('wp_enqueue_scripts', function() {
         wp_enqueue_script('netcom-map-louer', get_stylesheet_directory_uri() . '/assets/js/map/map-single.js?v=1.1.0', [], '1.0', true);
     }
 
+    if(get_the_ID() === HOME || get_the_ID() === BIEN_LOUER_LIST) {
+        wp_enqueue_script('rayon', get_stylesheet_directory_uri() . '/assets/js/rayon.js', [], '1.0', true);
+    }
+
     if(get_the_ID() === BIEN_LOUER_LIST) {
         wp_enqueue_script('map', get_stylesheet_directory_uri() . '/assets/js/map/locations-map.js',[],'1.0',true);
     }
@@ -46,12 +50,18 @@ add_action('wp_enqueue_scripts', function() {
 
 add_image_size('nc_header', 100, 100, true);
 add_image_size('nc_footer', 100, 100, true);
+
 add_image_size('nc_home', 100, 100, true);
+add_image_size('nc_home_baseline', 100, 100, true);
+add_image_size('nc_home_alaune', 100, 100, true);
+
 add_image_size('nc_post_list', 100, 100, true);
 add_image_size('nc_louer_list', 100, 100, true);
+
 add_image_size('nc_post_single', 100, 100, true);
 add_image_size('nc_page_single', 100, 100, true);
 add_image_size('nc_louer_single', 100, 100, true);
+
 add_image_size('nc_gutenberg', 100, 100, true);
 add_image_size('nc_elementor_quote', 100, 100, true);
 add_image_size('nc_elementor_featured', 100, 100, true);

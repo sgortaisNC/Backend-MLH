@@ -2,7 +2,7 @@
 
 if ( !defined('IMAGE_DEFAUT') ) define('IMAGE_DEFAUT', 156);
 
-if ( !defined('HOME') ) define('HOME', 1);
+if ( !defined('HOME') ) define('HOME', 5);
 
 //Listes
 if ( !defined('POST_LIST') ) define('POST_LIST', 137);
