@@ -56,4 +56,14 @@ add_action( 'rest_api_init', function() {
         'methods'  => 'GET',
         'callback' => [new Options(), 'header'],
     ] );
+
+    register_rest_route( 'montlucon/v1', '/options/footer', [
+        'methods'  => 'GET',
+        'callback' => [new Options(), 'footer'],
+    ] );
+
+    register_rest_route( 'montlucon/v1', '/options/homepage', [
+        'methods'  => 'GET',
+        'callback' => [new Options(), 'homepage'],
+    ] );
 } );
