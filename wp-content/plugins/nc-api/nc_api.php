@@ -23,5 +23,9 @@ function hello_world()
 
 function nc_hello_world()
 {
-    return 'Hello World';
+
+    //get all acf options
+    $a = get_fields('option');
+
+    return $a;
 }

@@ -37,9 +37,9 @@
 
     <div>
         <label for="rayon">Sélectionnez un rayon:</label>
-        <input type="range" name="rayon" id="rayon" min="5" max="100" step="5"
-               value="<?= (!empty($params['rayon'])) ? $params['rayon'] : '5' ?>">
-        <span id="rayonValue"><?= (!empty($params['rayon'])) ? $params['rayon'] : '5' ?> km</span>
+        <input type="range" name="rayon" id="rayon" min="0" max="200" step="5"
+               value="<?= (!empty($params['rayon'])) ? $params['rayon'] : '0' ?>">
+        <span id="rayonValue"><?= (!empty($params['rayon'])) ? $params['rayon'] : '0' ?> km</span>
     </div>
     <br>
     <div>
