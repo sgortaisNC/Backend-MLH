@@ -15,6 +15,7 @@ require_once "classes/Options.php";
 
 add_action( 'rest_api_init', function() {
 
+    // Offres d'emploi
     register_rest_route( 'montlucon/v1', '/offre', [
         'methods'  => 'GET',
         'callback' => [new OffreEmploi(), 'single'],
@@ -44,8 +45,15 @@ add_action( 'rest_api_init', function() {
         ],
     ] );
 
+
+    // Options de thème
     register_rest_route( 'montlucon/v1', '/options', [
         'methods'  => 'GET',
         'callback' => [new Options(), 'getAll'],
+    ] );
+
+    register_rest_route( 'montlucon/v1', '/options/header', [
+        'methods'  => 'GET',
+        'callback' => [new Options(), 'header'],
     ] );
 } );
