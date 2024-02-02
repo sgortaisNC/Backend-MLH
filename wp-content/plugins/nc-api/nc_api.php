@@ -66,4 +66,27 @@ add_action( 'rest_api_init', function() {
         'methods'  => 'GET',
         'callback' => [new Options(), 'homepage'],
     ] );
+
+    // Locations
+    register_rest_route( 'montlucon/v1', '/locations', [
+        'methods'  => 'GET',
+        'callback' => [new Location(), 'list'],
+        'args'     => [
+            'type' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+            'nombre' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+            'ville' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+        ],
+    ] );
 } );
