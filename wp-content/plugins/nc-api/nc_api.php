@@ -10,22 +10,42 @@
  */
 
 
+require_once "classes/OffreEmploi.php";
+require_once "classes/Options.php";
 
-add_action( 'rest_api_init', 'hello_world' );
+add_action( 'rest_api_init', function() {
 
-function hello_world()
-{
-    register_rest_route( 'montlucon/v1', '/hello', array(
-        'methods' => 'GET',
-        'callback' => 'nc_hello_world',
-    ) );
-}
+    register_rest_route( 'montlucon/v1', '/offre', [
+        'methods'  => 'GET',
+        'callback' => [new OffreEmploi(), 'single'],
+        'args'     => [
+            'id' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+        ],
+    ] );
 
-function nc_hello_world()
-{
+    register_rest_route( 'montlucon/v1', '/offres', [
+        'methods'  => 'GET',
+        'callback' => [new OffreEmploi(), 'list'],
+        'args'     => [
+            'contrat' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+            'metier' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+        ],
+    ] );
 
-    //get all acf options
-    $a = get_fields('option');
-
-    return $a;
-}
+    register_rest_route( 'montlucon/v1', '/options', [
+        'methods'  => 'GET',
+        'callback' => [new Options(), 'getAll'],
+    ] );
+} );
