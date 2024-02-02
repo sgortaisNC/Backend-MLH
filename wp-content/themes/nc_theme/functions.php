@@ -21,9 +21,9 @@ load('src/widgets/');
 
 ## Widgets Elementor
 
-add_action('init', function() {
-    load('src/widgets/elementor/');
-});
+//add_action('init', function() {
+//    load('src/widgets/elementor/');
+//});
 
 ## Shortcodes
 load('src/shortcodes/');

@@ -54,6 +54,7 @@ add_image_size('nc_footer', 100, 100, true);
 add_image_size('nc_home', 100, 100, true);
 add_image_size('nc_home_baseline', 100, 100, true);
 add_image_size('nc_home_alaune', 100, 100, true);
+add_image_size('nc_home_actualites', 100, 100, true);
 
 add_image_size('nc_post_list', 100, 100, true);
 add_image_size('nc_louer_list', 100, 100, true);
