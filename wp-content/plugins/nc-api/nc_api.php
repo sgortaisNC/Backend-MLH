@@ -12,6 +12,7 @@
 
 require_once "classes/OffreEmploi.php";
 require_once "classes/Options.php";
+require_once "classes/Location.php";
 
 add_action( 'rest_api_init', function() {
 
