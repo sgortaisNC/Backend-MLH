@@ -180,6 +180,7 @@ class Options
             foreach ($biensAlaune as $bien) {
                 $id = $bien->ID;
                 $biens[] = [
+                    'id' => $id,
                     'titre' => get_the_title($id),
                     'image' => has_post_thumbnail($id) ?
                         get_the_post_thumbnail_url($id, 'nc_louer_list') :
@@ -212,6 +213,7 @@ class Options
                 $actualitesIds[] = $id;
 
                 $actualites[] = [
+                    'id' => $id,
                     'titre' => get_the_title($id),
                     'image' => has_post_thumbnail($id) ?
                         get_the_post_thumbnail_url($id, 'nc_home_actualites') :
@@ -239,6 +241,7 @@ class Options
                 $actualitesQuery->the_post();
 
                 $actualites[] = [
+                    'id' => get_the_ID(),
                     'titre' => get_the_title(),
                     'image' => has_post_thumbnail(get_the_ID()) ?
                         get_the_post_thumbnail_url(get_the_ID(), 'nc_home_actualites') :
