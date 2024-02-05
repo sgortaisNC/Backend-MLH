@@ -52,7 +52,7 @@ add_image_size('nc_header', 235, 121, true);
 add_image_size('nc_footer', 100, 100, true);
 
 add_image_size('nc_home', 100, 100, true);
-add_image_size('nc_home_baseline', 100, 100, true);
+add_image_size('nc_home_baseline', 1920, 717, true);
 add_image_size('nc_home_alaune', 100, 100, true);
 add_image_size('nc_home_actualites', 100, 100, true);
 

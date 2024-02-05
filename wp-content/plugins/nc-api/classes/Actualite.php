@@ -16,7 +16,8 @@ class Actualite
                 wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_single')[0]),
             'contenu' => get_the_content(null, false, $id) ?? null,
             'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
-            'date_partielle' => get_the_date('d M', $id),
+            'jour' => get_the_date('d', $id),
+            'mois' => get_the_date('M', $id),
             'date' => get_the_date('d/m/Y', $id),
             'lien' => get_permalink($id),
         ];
@@ -47,7 +48,8 @@ class Actualite
                     wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_list')[0]),
                 'contenu' => get_the_content(null, false, get_the_ID()) ?? null,
                 'chapo' => has_excerpt(get_the_ID()) ? get_the_excerpt(get_the_ID()) : null,
-                'date_partielle' => get_the_date('d M', get_the_ID()),
+                'jour' => get_the_date('d', get_the_ID()),
+                'mois' => get_the_date('M', get_the_ID()),
                 'date' => get_the_date('d M Y', get_the_ID()),
                 'lien' => get_permalink(),
             ];

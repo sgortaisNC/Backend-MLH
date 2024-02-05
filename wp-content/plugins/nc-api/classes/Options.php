@@ -97,7 +97,7 @@ class Options
         //baseline + image option de thème
         $baselineOption = get_field('image_baseline', 'option') ?? null;
         $baseline = [
-            'image' => $baselineOption['image']['ID'] ?? null,
+            'image' => wp_get_attachment_image_src($baselineOption['image']['ID'], 'nc_post_single')[0] ?? null,
             "ligne1" => $baselineOption["ligne_1"] ?? null,
             "ligne2" => $baselineOption["ligne_2"] ?? null,
             "ligne3" => $baselineOption["ligne_3"] ?? null,
