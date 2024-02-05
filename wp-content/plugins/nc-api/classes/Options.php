@@ -14,20 +14,37 @@ class Options
 
     static function header(): array
     {
-        $menu =  wp_nav_menu([
-            'theme_location' => "menu_header",
-            'items_wrap' => '<ul class="%2$s">%3$s</ul>',
-            'depth' => 2,
-            'echo' => false,
-            'container' => '',
-        ]);
+
+        //order by menu_order
+        $menuQuery = wp_get_nav_menu_items(15);
+        $orderNiveau1 = 0;
+        $orderNiveau2 = 0;
+
+        foreach ($menuQuery as $item) {
+            if ($item->menu_item_parent == 0) {
+                $orderNiveau1++;
+                $menu[$orderNiveau1] = [
+                    'id' => $item->ID,
+                    'title' => $item->title,
+                    'url' => $item->url,
+                ];
+            } else {
+                $menu[$orderNiveau1]['sous_menu'][] = [
+                    'id' => $item->ID,
+                    'title' => $item->title,
+                    'url' => $item->url,
+                ];
+            }
+
+        }
+
 
         $alerteOption = get_field('alerte', 'option');
 
         $alerte = [];
         $today = date('d/m/Y');
 
-        if(!empty($alerteOption) && $today >= $alerteOption['date_debut'] && $today <= $alerteOption['date_fin']) {
+        if (!empty($alerteOption) && $today >= $alerteOption['date_debut'] && $today <= $alerteOption['date_fin']) {
             $alerte[] = [
                 'titre' => $alerteOption['titre'],
                 'contenu' => $alerteOption['contenu'],
@@ -50,7 +67,7 @@ class Options
     static function footer(): array
     {
         //Menu footer
-        $menu =  wp_nav_menu([
+        $menu = wp_nav_menu([
             'theme_location' => "menu_footer",
             'items_wrap' => '<ul class="%2$s">%3$s</ul>',
             'depth' => 2,
@@ -62,7 +79,7 @@ class Options
         $acces = [];
         $acces_rapide = get_field("acces_rapides", "options") ?? null;
 
-        if(!empty($acces_rapide)){
+        if (!empty($acces_rapide)) {
             foreach ($acces_rapide as $value) {
                 $acces[$value['lien'][0]->ID] = $value['lien'][0]->post_name ?? null;
             }
@@ -72,7 +89,7 @@ class Options
         $social = [];
         $social_networks = get_field("reseaux_sociaux", "options") ?? null;
 
-        if(!empty($social_networks)){
+        if (!empty($social_networks)) {
             $social["linkedin"] = $social_networks['linkedin'] ?? null;
             $social["facebook"] = $social_networks['facebook'] ?? null;
             $social["instagram"] = $social_networks['instagram'] ?? null;
@@ -133,8 +150,8 @@ class Options
         $biensAlaune = get_field('biens_alaune', 'option') ?? null;
 
 
-        if(!empty($biensAlaune)){
-            foreach ($biensAlaune as $bien){
+        if (!empty($biensAlaune)) {
+            foreach ($biensAlaune as $bien) {
                 $id = $bien->ID;
                 $biens[] = [
                     'titre' => get_the_title($id),
@@ -163,8 +180,8 @@ class Options
 
         $actualitesOption = get_field('actualites', 'option') ?? null;
 
-        if(!empty($actualitesOption)){
-            foreach ($actualitesOption as $actualite){
+        if (!empty($actualitesOption)) {
+            foreach ($actualitesOption as $actualite) {
                 $id = $actualite->ID;
                 $actualitesIds[] = $id;
 
@@ -180,7 +197,7 @@ class Options
             }
         }
 
-        if(count($actualites) < 3){
+        if (count($actualites) < 3) {
             $args = [
                 'post_type' => 'post',
                 'post_status' => 'publish',
@@ -214,12 +231,12 @@ class Options
 
         $chiffresOption = get_field('chiffres_cles', 'option') ?? null;
 
-        if(!empty($chiffresOption)){
-            foreach ($chiffresOption as $chiffre){
+        if (!empty($chiffresOption)) {
+            foreach ($chiffresOption as $chiffre) {
                 $chiffres[] = [
                     'texte' => $chiffre['texte'] ?? null,
                     'chiffre' => $chiffre['chiffre'] ?? null,
-                    'pictogramme' =>  wp_get_attachment_image_src($chiffre['pictogramme']['ID'], 'nc_home_actualites')[0] ?? null,
+                    'pictogramme' => wp_get_attachment_image_src($chiffre['pictogramme']['ID'], 'nc_home_actualites')[0] ?? null,
                 ];
             }
         }
