@@ -24,6 +24,7 @@ class Options
 
         foreach ($menuQuery as $item) {
             if ($item->menu_item_parent == 0) {
+                $orderNiveau2 = -1;
                 $orderNiveau1++;
                 $menu[$orderNiveau1] = [
                     'id' => $item->ID,
@@ -34,6 +35,7 @@ class Options
                 $currentNiveau1 = &$menu[$orderNiveau1];
             } elseif (isset($currentNiveau1)) {
                 if ($item->menu_item_parent == $currentNiveau1['id']) {
+                    $orderNiveau3 = -1;
                     $orderNiveau2++;
                     $currentNiveau1['niveau2'][$orderNiveau2] = [
                         'id' => $item->ID,
@@ -43,6 +45,7 @@ class Options
                     ];
                     $currentNiveau2 = &$currentNiveau1['niveau2'][$orderNiveau2];
                 } elseif (isset($currentNiveau2) && $item->menu_item_parent == $currentNiveau2['id']) {
+
                     $orderNiveau3++;
                     $currentNiveau2['niveau3'][$orderNiveau3] = [
                         'id' => $item->ID,
