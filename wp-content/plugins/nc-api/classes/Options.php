@@ -179,11 +179,11 @@ class Options
             }
         }
 
-        if(count($actualites) < 4){
+        if(count($actualites) < 3){
             $args = [
                 'post_type' => 'post',
                 'post_status' => 'publish',
-                'posts_per_page' => 4 - count($actualites),
+                'posts_per_page' => 3 - count($actualites),
                 'orderby' => 'date',
                 'order' => 'DESC',
                 'post__not_in' => $actualitesIds,

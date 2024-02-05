@@ -90,4 +90,9 @@ add_action( 'rest_api_init', function() {
             ],
         ],
     ] );
+
+    register_rest_route( 'montlucon/v1', '/location', [
+        'methods'  => 'GET',
+        'callback' => [new Location(), 'single'],
+    ] );
 } );
