@@ -139,8 +139,8 @@ class Options
                 $biens[] = [
                     'titre' => get_the_title($id),
                     'image' => has_post_thumbnail($id) ?
-                        get_the_post_thumbnail_url($id, 'nc_home_alaune') :
-                        wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_home_alaune')[0],
+                        get_the_post_thumbnail_url($id, 'nc_louer_list') :
+                        wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0],
                     'type' => get_the_terms($id, 'type_de_bien') ?
                         join(', ', wp_list_pluck(get_the_terms($id, 'type_de_bien'), 'name')) :
                         null,
