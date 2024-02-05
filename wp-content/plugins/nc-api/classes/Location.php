@@ -88,8 +88,8 @@ class Location
             $louer[get_the_ID()] = [
                 'titre' => get_the_title(),
                 'image' => has_post_thumbnail(get_the_ID()) ?
-                    get_the_post_thumbnail_url(get_the_ID(), 'nc_post_list') :
-                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_list')[0],
+                    get_the_post_thumbnail_url(get_the_ID(), 'nc_louer_list') :
+                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0],
                 'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
                     join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
                     null,
