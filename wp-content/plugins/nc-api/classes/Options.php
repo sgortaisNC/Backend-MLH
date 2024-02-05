@@ -86,13 +86,16 @@ class Options
     static function footer(): array
     {
         //Menu footer
-        $menu = wp_nav_menu([
-            'theme_location' => "menu_footer",
-            'items_wrap' => '<ul class="%2$s">%3$s</ul>',
-            'depth' => 2,
-            'echo' => false,
-            'container' => '',
-        ]);
+        $menuQuery = wp_get_nav_menu_items(15);
+        $menu = [];
+
+        foreach ($menuQuery as $item) {
+            $menu[$item->ID] = [
+                'id' => $item->ID,
+                'title' => $item->title,
+                'url' => $item->url,
+            ];
+        }
 
         //Accès rapides
         $acces = [];
