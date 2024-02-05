@@ -173,7 +173,8 @@ class Options
                     'image' => has_post_thumbnail($id) ?
                         get_the_post_thumbnail_url($id, 'nc_home_actualites') :
                         wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_home_actualites')[0],
-                    'date' => get_the_date('d/m/Y', $id),
+                    'date_partielle' => get_the_date('d M', $id),
+                    'date' => get_the_date('d M Y', $id),
                     'lien' => get_permalink($id),
                 ];
             }
@@ -199,7 +200,8 @@ class Options
                     'image' => has_post_thumbnail(get_the_ID()) ?
                         get_the_post_thumbnail_url(get_the_ID(), 'nc_home_actualites') :
                         wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_home_actualites')[0],
-                    'date' => get_the_date('d/m/Y'),
+                    'date_partielle' => get_the_date('d M'),
+                    'date' => get_the_date('d M Y'),
                     'lien' => get_permalink(),
                 ];
             }
