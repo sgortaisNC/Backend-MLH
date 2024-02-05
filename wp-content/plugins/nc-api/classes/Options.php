@@ -88,14 +88,18 @@ class Options
         //Menu footer
         $menuQuery = wp_get_nav_menu_items(16);
         $menu = [];
+        $order = 0;
 
         foreach ($menuQuery as $item) {
-            $menu[$item->ID] = [
+            $menu[$order] = [
                 'id' => $item->ID,
                 'title' => $item->title,
                 'url' => $item->url,
             ];
+            $order++;
         }
+
+        ksort($menu);
 
         //Accès rapides
         $acces = [];
