@@ -17,9 +17,9 @@ class Options
 
         $menuQuery = wp_get_nav_menu_items(15);
         $menu = [];
-        $orderNiveau1 = 0;
-        $orderNiveau2 = 0;
-        $orderNiveau3 = 0;
+        $orderNiveau1 = -1;
+        $orderNiveau2 = -1;
+        $orderNiveau3 = -1;
 
 
         foreach ($menuQuery as $item) {
@@ -54,8 +54,6 @@ class Options
         }
 
         unset($currentNiveau1, $currentNiveau2); // on supprime les réferences & pour éviter les problèmes et optimiser la libération de mémoire
-
-
 
         $alerteOption = get_field('alerte', 'option');
 
