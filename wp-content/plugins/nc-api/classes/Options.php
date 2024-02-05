@@ -86,7 +86,7 @@ class Options
     static function footer(): array
     {
         //Menu footer
-        $menuQuery = wp_get_nav_menu_items(15);
+        $menuQuery = wp_get_nav_menu_items(16);
         $menu = [];
 
         foreach ($menuQuery as $item) {
