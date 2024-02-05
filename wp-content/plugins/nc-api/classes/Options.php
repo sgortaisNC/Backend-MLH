@@ -15,10 +15,12 @@ class Options
     static function header(): array
     {
 
-        //order by menu_order
         $menuQuery = wp_get_nav_menu_items(15);
+        $menu = [];
         $orderNiveau1 = 0;
         $orderNiveau2 = 0;
+        $orderNiveau3 = 0;
+
 
         foreach ($menuQuery as $item) {
             if ($item->menu_item_parent == 0) {
@@ -27,16 +29,32 @@ class Options
                     'id' => $item->ID,
                     'title' => $item->title,
                     'url' => $item->url,
+                    'niveau2' => [],
                 ];
-            } else {
-                $menu[$orderNiveau1]['sous_menu'][] = [
-                    'id' => $item->ID,
-                    'title' => $item->title,
-                    'url' => $item->url,
-                ];
+                $currentNiveau1 = &$menu[$orderNiveau1];
+            } elseif (isset($currentNiveau1)) {
+                if ($item->menu_item_parent == $currentNiveau1['id']) {
+                    $orderNiveau2++;
+                    $currentNiveau1['niveau2'][$orderNiveau2] = [
+                        'id' => $item->ID,
+                        'title' => $item->title,
+                        'url' => $item->url,
+                        'niveau3' => [],
+                    ];
+                    $currentNiveau2 = &$currentNiveau1['niveau2'][$orderNiveau2];
+                } elseif (isset($currentNiveau2) && $item->menu_item_parent == $currentNiveau2['id']) {
+                    $orderNiveau3++;
+                    $currentNiveau2['niveau3'][$orderNiveau3] = [
+                        'id' => $item->ID,
+                        'title' => $item->title,
+                        'url' => $item->url,
+                    ];
+                }
             }
-
         }
+
+        unset($currentNiveau1, $currentNiveau2); // on supprime les réferences & pour éviter les problèmes et optimiser la libération de mémoire
+
 
 
         $alerteOption = get_field('alerte', 'option');
