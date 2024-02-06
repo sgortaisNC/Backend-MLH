@@ -9,6 +9,11 @@
  * Author:      Bruno Etcheverry [Net.Com]
  */
 
+add_filter('rest_url', 'wptips_home_url_as_api_url');
+function wptips_home_url_as_api_url($url) {
+    $url = str_replace(home_url(),site_url() , $url);
+    return $url;
+}
 
 require_once "classes/Actualite.php";
 require_once "classes/OffreEmploi.php";
