@@ -18,11 +18,6 @@ require_once "classes/Location.php";
 add_action( 'rest_api_init', function() {
 
     //Actalités
-    register_rest_route( 'montlucon/v1', '/actualites', [
-        'methods'  => 'GET',
-        'callback' => [new Actualite(), 'list'],
-    ] );
-
     register_rest_route( 'montlucon/v1', '/actualite', [
         'methods'  => 'GET',
         'callback' => [new Actualite(), 'single'],
@@ -34,6 +29,12 @@ add_action( 'rest_api_init', function() {
             ],
         ],
     ] );
+
+    register_rest_route( 'montlucon/v1', '/actualites', [
+        'methods'  => 'GET',
+        'callback' => [new Actualite(), 'list'],
+    ] );
+
 
     // Offres d'emploi
     register_rest_route( 'montlucon/v1', '/offre', [

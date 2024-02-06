@@ -275,12 +275,19 @@ class Options
             }
         }
 
+
+        //
+        $focus = [
+            'contenu' => get_field('focus_contenu', 'option') ?? null,
+        ];
+
         return [
             'baseline' => $baseline,
             'filtres' => $filtres,
             'biens' => $biens,
             'actualites' => $actualites,
             'chiffres' => $chiffres,
+            'focus' => $focus,
         ];
     }
 }
