@@ -109,8 +109,8 @@ class Options
             foreach ($acces_rapide as $value) {
                 $acces[] = [
                     'id' => $value['lien'][0]->ID,
-                    'title' => $value['lien'][0]->ID,
-                    'url' => $value['lien'][0]->url ?? null
+                    'title' => $value['lien'][0]->post_title ?? null,
+                    'url' => get_permalink($value['lien'][0]->ID) ?? null
                 ];
             }
         }
