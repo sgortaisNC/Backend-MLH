@@ -107,7 +107,11 @@ class Options
 
         if (!empty($acces_rapide)) {
             foreach ($acces_rapide as $value) {
-                $acces[$value['lien'][0]->ID] = $value['lien'][0]->post_name ?? null;
+                $acces[] = [
+                    'id' => $value['lien'][0]->ID,
+                    'title' => $value['lien'][0]->ID,
+                    'url' => $value['lien'][0]->url ?? null
+                ];
             }
         }
 
