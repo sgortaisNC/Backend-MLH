@@ -73,6 +73,7 @@ class Options
         }
 
         return [
+            'Test' => 'HelloWorlds',
             'alerte' => $alerte,
             'menu' => $menu,
             'logo' => get_field('logo', 'option') ?? null,
