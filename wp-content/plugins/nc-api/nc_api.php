@@ -19,20 +19,21 @@ require_once "classes/Actualite.php";
 require_once "classes/OffreEmploi.php";
 require_once "classes/Options.php";
 require_once "classes/Location.php";
+require_once "classes/Sidebar.php";
 
 add_action( 'rest_api_init', function() {
 
     //Actalités
     register_rest_route( 'montlucon/v1', '/actualite', [
-        'methods'  => 'GET',
-        'callback' => [new Actualite(), 'single'],
         'args'     => [
             'id' => [
                 'validate_callback' => function( $param, $request, $key ) {
-                    return is_numeric( $param );
+                    return get_post_type( $param ) === 'post';
                 },
             ],
         ],
+        'methods'  => 'GET',
+        'callback' => [new Actualite(), 'single']
     ] );
 
     register_rest_route( 'montlucon/v1', '/actualites', [
@@ -48,7 +49,7 @@ add_action( 'rest_api_init', function() {
         'args'     => [
             'id' => [
                 'validate_callback' => function( $param, $request, $key ) {
-                    return is_numeric( $param );
+                    return get_post_type( $param ) === 'offre_emploi';
                 },
             ],
         ],
@@ -119,5 +120,25 @@ add_action( 'rest_api_init', function() {
     register_rest_route( 'montlucon/v1', '/location', [
         'methods'  => 'GET',
         'callback' => [new Location(), 'single'],
+        'args'     => [
+            'id' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return get_post_type( $param ) === 'bien_louer';
+                },
+            ],
+        ],
+    ] );
+
+    //Sidebar
+    register_rest_route( 'montlucon/v1', '/sidebar', [
+        'methods'  => 'GET',
+        'callback' => [new Sidebar(), 'sidebar'],
+        'args'     => [
+            'type' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+        ],
     ] );
 } );

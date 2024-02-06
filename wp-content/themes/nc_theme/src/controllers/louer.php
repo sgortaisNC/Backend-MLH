@@ -72,7 +72,7 @@ function nc_louer_list() {
     while ($louerQuery->have_posts()) {
         $louerQuery->the_post();
 
-        $louer[get_the_ID()] = [
+        $louer[] = [
             'titre' => get_the_title(),
             'image' => has_post_thumbnail(get_the_ID()) ?
                 get_the_post_thumbnail_url(get_the_ID(), 'nc_post_list') :

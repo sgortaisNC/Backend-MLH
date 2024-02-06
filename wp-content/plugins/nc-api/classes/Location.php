@@ -8,6 +8,43 @@ class Location
     public function single(): array
     {
         $location = [];
+        $location['id'] = $_GET['id'] ?? null;
+        if($location['id'] == null) {
+            return [];
+        }
+
+        $location['titre'] = get_the_title($location['id']);
+
+        $location['description'] = get_the_content(null, false, $location['id']);
+
+        $location['chapo'] = has_excerpt($location['id']) ? get_the_excerpt($location['id']) : null;
+
+        $location['image'] = has_post_thumbnail($location['id']) ?
+            get_the_post_thumbnail_url($location['id'], 'nc_post_list') :
+            wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_list')[0];
+
+        $location['date'] = get_the_date('d M Y',  $location['id']);
+
+        $location['loyer'] = get_field('loyer_charges_comprises', $location['id']) ??
+            get_field('loyer', $location['id']) ?? null;
+
+        $location['surface'] = get_field('surface', $location['id']) ?? null;
+
+        $location['type'] = get_the_terms($location['id'], 'type_de_bien') ?
+            join(', ', wp_list_pluck(get_the_terms($location['id'], 'type_de_bien'), 'name')) : null;
+
+        $location['nombre_pieces'] = get_the_terms($location['id'], 'nombre_piece') ?
+            join(', ', wp_list_pluck(get_the_terms($location['id'], 'nombre_piece'), 'name')) : null;
+
+        $location['ville'] = get_the_terms($location['id'], 'ville_code_postal') ?
+            join(', ', wp_list_pluck(get_the_terms($location['id'], 'ville_code_postal'), 'name')) : null;
+
+        $location['markers'] = [
+            'latitude' => get_field('latitude', $location['id']) ?? null,
+            'longitude' => get_field('longitude', $location['id']) ?? null,
+        ];
+
+
 
         return $location;
     }
