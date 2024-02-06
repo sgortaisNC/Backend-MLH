@@ -101,7 +101,7 @@ class Options
 
         ksort($menu);
 
-        //Accès rapides
+        //Accès rapides --
         $acces = [];
         $acces_rapide = get_field("acces_rapides", "options") ?? null;
 
