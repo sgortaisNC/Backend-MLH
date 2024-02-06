@@ -21,17 +21,17 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'montlucon' );
-
-/** Database username */
-define( 'DB_USER', 'montlucon' );
-
-/** Database password */
-define( 'DB_PASSWORD', 'netcom' );
-
-/** Database hostname */
-define( 'DB_HOST', '172.16.5.26' );
-
+if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'montlucon.loc') {
+    define( 'DB_NAME', 'montlucon' );
+    define( 'DB_USER', 'montlucon' );
+    define( 'DB_PASSWORD', 'netcom' );
+    define( 'DB_HOST', '172.16.5.26' );
+} else {
+    define('DB_NAME', 'preprod_bdd_montlucon');
+    define('DB_USER', 'user_ppd_mlh');
+    define('DB_PASSWORD', '2#2zXxmjsa0G4miLz');
+    define('DB_HOST', '127.0.0.1');
+}
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
 
