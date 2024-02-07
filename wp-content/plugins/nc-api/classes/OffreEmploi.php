@@ -8,13 +8,13 @@ class OffreEmploi
     public function single() : array
     {
         $offre = [];
-
         $offre['id'] = $_GET['id'] ?? null;
         if($offre['id'] == null) {
             return [];
         }
 
         $offre = [
+            'id' => $offre['id'],
             'titre' => get_the_title($offre['id']),
             'description' => get_the_content(null, false, $offre['id']),
             'chapo' => has_excerpt($offre['id']) ? get_the_excerpt($offre['id']) : null,
@@ -28,7 +28,9 @@ class OffreEmploi
             'metier' => get_the_terms( $offre['id'], 'metier') ?
                 join(', ', wp_list_pluck(get_the_terms( $offre['id'], 'metier'), 'name')) : null,
             'pdf' => get_field('pdf_presentation', $offre['id']) ?? null,
+            'lien' => get_permalink($offre['id']),
         ];
+
         return $offre;
 
     }
@@ -88,7 +90,8 @@ class OffreEmploi
         while ($emploiQuery->have_posts()) {
             $emploiQuery->the_post();
 
-            $emplois[get_the_ID()] = [
+            $emplois[] = [
+                'id' => get_the_ID(),
                 'titre' => get_the_title(),
                 'date' => get_the_date(),
                 'reference' => get_field('reference_offre') ?? null,

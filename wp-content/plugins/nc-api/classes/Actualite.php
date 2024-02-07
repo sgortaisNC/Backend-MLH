@@ -11,6 +11,7 @@ class Actualite
         $id = $_GET['id'] ?? null;
 
         $post[] = [
+            'id' => $id,
             'titre' => get_the_title($id),
             'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'nc_post_single') :
                 wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_single')[0]),
@@ -42,7 +43,8 @@ class Actualite
         while ($postsRequest->have_posts()) {
             $postsRequest->the_post();
 
-            $posts[get_the_ID()] = [
+            $posts[] = [
+                'id' => get_the_ID(),
                 'titre' => get_the_title(),
                 'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'nc_post_list') :
                     wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_list')[0]),
