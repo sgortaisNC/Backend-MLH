@@ -115,6 +115,11 @@ add_action( 'rest_api_init', function() {
                     return is_numeric( $param );
                 },
             ],
+            'rayon' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
         ],
     ] );
 

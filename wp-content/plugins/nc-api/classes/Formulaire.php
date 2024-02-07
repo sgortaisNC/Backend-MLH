@@ -24,7 +24,8 @@ class Formulaire
     static function formulaire_by_id()
     {
         $form_id = $_GET['id'] ?? null;
-        $submission_data = Forminator_API::get_form( $form_id );
+//        $submission_data = Forminator_API::get_form( $form_id );
+        $submission_data = do_shortcode( '[forminator_form id="'.$form_id.'"]');
 
         return rest_ensure_response( $submission_data);
     }

@@ -65,28 +65,49 @@ class Location
 
     public function list(): array
     {
-        $filtres = null;
+        $filtres = [];
 
-        $filtres['types'] = get_terms([
+        $filtresTerm['types'] = get_terms([
             'taxonomy' => 'type_de_bien',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
 
-        $filtres['nombre_piece'] = get_terms([
+        foreach ($filtresTerm['types'] as $key => $value) {
+            $filtres['types'][] = [
+                'value' => $key,
+                'name' => $value,
+            ];
+        }
+
+        $filtresTerm['nombre_piece'] = get_terms([
             'taxonomy' => 'nombre_piece',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
 
-        $filtres['villes'] = get_terms([
+        foreach ($filtresTerm['nombre_piece'] as $key => $value) {
+            $filtres['nombre_piece'][] = [
+                'value' => $key,
+                'name' => $value,
+            ];
+        }
+
+        $filtresTerm['villes'] = get_terms([
             'taxonomy' => 'ville_code_postal',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
+
+        foreach ($filtresTerm['villes'] as $key => $value) {
+            $filtres['villes'][] = [
+                'value' => $key,
+                'name' => $value,
+            ];
+        }
 
         $args = [
             'post_type' => "bien_louer",
@@ -129,6 +150,10 @@ class Location
             ];
         }
 
+        if(!empty($_GET['rayon'])){
+            $rayon = $_GET['rayon'] ??null;
+        }
+
         $louerQuery = new WP_Query($args);
 
         $louer = [];
@@ -164,6 +189,27 @@ class Location
             'filtres' => $filtres,
             'max_num_pages' => $louerQuery->max_num_pages,
         ];
+    }
+
+    function distance_entre_deux_points($lat1, $lon1, $lat2, $lon2) {
+        $R = 6371;
+
+        // Convertir les degrés en radians
+        $lat1 = deg2rad($lat1);
+        $lon1 = deg2rad($lon1);
+        $lat2 = deg2rad($lat2);
+        $lon2 = deg2rad($lon2);
+
+        // Calculer les différences de latitude et de longitude
+        $dlat = $lat2 - $lat1;
+        $dlon = $lon2 - $lon1;
+
+        // Calculer la distance entre les deux points en utilisant la formule de la distance sur un globe terrestre
+        $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlon / 2) * sin($dlon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $distance = $R * $c;
+
+        return $distance; // Distance en kilomètres
     }
 
 }

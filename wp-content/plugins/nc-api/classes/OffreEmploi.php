@@ -39,19 +39,33 @@ class OffreEmploi
     {
         $filtres = null;
 
-        $filtres['contrats'] = get_terms([
+        $filtresTerm['contrats'] = get_terms([
             'taxonomy' => 'type_de_contrat',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
 
-        $filtres['metiers'] = get_terms([
+        foreach ($filtresTerm['contrats'] as $key => $value) {
+            $filtres['contrats'][] = [
+                'value' => $key,
+                'name' => $value,
+            ];
+        }
+
+        $filtresTerm['metiers'] = get_terms([
             'taxonomy' => 'metier',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
+
+        foreach ($filtresTerm['metiers'] as $key => $value) {
+            $filtres['metiers'][] = [
+                'value' => $key,
+                'name' => $value,
+            ];
+        }
 
         $args = [
             'post_type' => "offre_emploi",

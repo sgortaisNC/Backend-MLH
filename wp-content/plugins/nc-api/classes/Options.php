@@ -163,8 +163,8 @@ class Options
 
         foreach ($filtresTerms['types'] as $id => $filtre) {
             $filtres['types'][] = [
-                'valeur' => $id,
-                'label' => $filtre,
+                'value' => $id,
+                'name' => $filtre,
             ];
         }
 
@@ -177,8 +177,8 @@ class Options
 
         foreach ($filtresTerms['nombre_piece'] as $id => $filtre) {
             $filtres['nombre_piece'][] = [
-                'valeur' => $id,
-                'label' => $filtre,
+                'value' => $id,
+                'name' => $filtre,
             ];
         }
 
@@ -191,8 +191,8 @@ class Options
 
         foreach ($filtresTerms['villes'] as $id => $filtre) {
             $filtres['villes'][] = [
-                'valeur' => $id,
-                'label' => $filtre,
+                'value' => $id,
+                'name' => $filtre,
             ];
         }
 
