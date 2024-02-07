@@ -103,11 +103,18 @@ class Location
         ]);
 
         foreach ($filtresTerm['villes'] as $key => $value) {
+
+          $latitude = get_field('latitude', 'ville_code_postal_'.$key);
+            $longitude = get_field('longitude', 'ville_code_postal_'.$key);
+
             $filtres['villes'][] = [
                 'value' => $key,
                 'name' => $value,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
             ];
         }
+
 
         $args = [
             'post_type' => "bien_louer",
@@ -139,20 +146,17 @@ class Location
             ];
         }
 
-        if(!empty($_GET['ville'])){
-            $args['tax_query'][] = [
-                [
-                    'taxonomy' => 'ville_code_postal',
-                    'field' => 'term_taxonomy_id',
-                    'terms' => $_GET['ville'],
-                    'operator' => 'IN'
-                ]
-            ];
-        }
+//        if(!empty($_GET['ville'])){
+//            $args['tax_query'][] = [
+//                [
+//                    'taxonomy' => 'ville_code_postal',
+//                    'field' => 'term_taxonomy_id',
+//                    'terms' => $_GET['ville'],
+//                    'operator' => 'IN'
+//                ]
+//            ];
+//        }
 
-        if(!empty($_GET['rayon'])){
-            $rayon = $_GET['rayon'] ??null;
-        }
 
         $louerQuery = new WP_Query($args);
 
@@ -161,8 +165,25 @@ class Location
         while ($louerQuery->have_posts()) {
             $louerQuery->the_post();
 
+            if(!empty($_GET['rayon']) && !empty($_GET['ville'])){
+                $ville = get_term($_GET['ville'], 'ville_code_postal');
+                $latitude = get_field('latitude', $ville);
+                $longitude = get_field('longitude', $ville);
+                $coordonnees = [
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ];
+
+                if($coordonnees['latitude'] && $coordonnees['longitude'] && get_field('latitude') && get_field('longitude')) {
+                    $distance = Location::distance_entre_deux_points(
+                        $coordonnees['latitude'], $coordonnees['longitude'],
+                        get_field('latitude'), get_field('longitude'), $_GET['rayon']);
+                }
+            }
+
             $louer[] = [
                 'id' => get_the_ID(),
+                'distance' => $distance ?? null,
                 'titre' => get_the_title(),
                 'image' => has_post_thumbnail(get_the_ID()) ?
                     get_the_post_thumbnail_url(get_the_ID(), 'nc_louer_list') :
@@ -175,6 +196,8 @@ class Location
                     null,
                 'loyer' => get_field('loyer_charges_comprises') ?? null,
                 'surface' => get_field('surface') ?? null,
+                'longitude' => get_field('longitude') ?? null,
+                'latitude' => get_field('latitude') ?? null,
                 'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
                     join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
                     null,
@@ -191,25 +214,25 @@ class Location
         ];
     }
 
-    function distance_entre_deux_points($lat1, $lon1, $lat2, $lon2) {
+    function distance_entre_deux_points($lat1, $lon1, $lat2, $lon2, $rayon) {
         $R = 6371;
 
-        // Convertir les degrés en radians
         $lat1 = deg2rad($lat1);
         $lon1 = deg2rad($lon1);
         $lat2 = deg2rad($lat2);
         $lon2 = deg2rad($lon2);
 
-        // Calculer les différences de latitude et de longitude
         $dlat = $lat2 - $lat1;
         $dlon = $lon2 - $lon1;
 
-        // Calculer la distance entre les deux points en utilisant la formule de la distance sur un globe terrestre
         $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlon / 2) * sin($dlon / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $distance = $R * $c;
 
-        return $distance; // Distance en kilomètres
+        if($distance > $rayon){
+            return null;
+        }
+        return $distance;
     }
 
 }

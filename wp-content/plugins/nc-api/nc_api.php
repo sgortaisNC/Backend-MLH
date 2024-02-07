@@ -25,14 +25,7 @@ require_once "classes/Formulaire.php";
 add_action( 'rest_api_init', function() {
 
     //Actalités
-    register_rest_route( 'montlucon/v1', '/actualite', [
-        'args'     => [
-            'id' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return get_post_type( $param ) === 'post';
-                },
-            ],
-        ],
+    register_rest_route( 'montlucon/v1', '/actualite/(?P<slug>[\w-]+)', [
         'methods'  => 'GET',
         'callback' => [new Actualite(), 'single']
     ] );

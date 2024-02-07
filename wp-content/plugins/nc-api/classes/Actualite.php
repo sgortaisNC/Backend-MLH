@@ -5,23 +5,27 @@
  */
 class Actualite
 {
-    public function single()
+    public function single($request)
     {
-        $post = [];
-        $id = $_GET['id'] ?? null;
+        $slug = $request['slug'];
 
-        $post[] = [
-            'id' => $id,
-            'titre' => get_the_title($id),
-            'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'nc_post_single') :
-                wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_single')[0]),
-            'contenu' => get_the_content(null, false, $id) ?? null,
-            'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
-            'jour' => get_the_date('d', $id),
-            'mois' => get_the_date('M', $id),
-            'date' => get_the_date('d/m/Y', $id),
-            'lien' => get_permalink($id),
-        ];
+        $postBySlug = get_page_by_path( $slug, OBJECT, 'post' );
+        $post = [];
+        if ( $postBySlug ) {
+            $id = $postBySlug->ID;
+            $post[] = [
+                'id' => $id,
+                'titre' => get_the_title($id),
+                'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'nc_post_single') :
+                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_single')[0]),
+                'contenu' => get_the_content(null, false, $id) ?? null,
+                'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
+                'jour' => get_the_date('d', $id),
+                'mois' => get_the_date('M', $id),
+                'date' => get_the_date('d/m/Y', $id),
+                'lien' => get_permalink($id),
+            ];
+        }
 
         return $post;
     }
