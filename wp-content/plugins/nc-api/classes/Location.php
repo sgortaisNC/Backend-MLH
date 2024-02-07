@@ -20,8 +20,22 @@ class Location
         $location['chapo'] = has_excerpt($location['id']) ? get_the_excerpt($location['id']) : null;
 
         $location['image'] = has_post_thumbnail($location['id']) ?
-            get_the_post_thumbnail_url($location['id'], 'nc_post_list') :
-            wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_list')[0];
+            get_the_post_thumbnail_url($location['id'], 'nc_louer_single') :
+            wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_single')[0];
+
+        $images = get_field('images', $location['id']) ?? null;
+        $location['images'] = [];
+
+        if($images){
+            foreach ($images as $image) {
+                $id = $image['image']['ID'];
+                $location['images'][] = [
+                    'id' => $id,
+                    'url' => wp_get_attachment_image_src($id, 'nc_louer_single')[0],
+                    'alt' => $image['image']['alt'],
+                ];
+            }
+        }
 
         $location['date'] = get_the_date('d M Y',  $location['id']);
 
@@ -45,7 +59,6 @@ class Location
         ];
 
         $location['lien'] = get_permalink($location['id']);
-
 
         return $location;
     }

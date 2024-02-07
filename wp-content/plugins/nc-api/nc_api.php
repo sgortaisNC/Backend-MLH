@@ -20,6 +20,7 @@ require_once "classes/OffreEmploi.php";
 require_once "classes/Options.php";
 require_once "classes/Location.php";
 require_once "classes/Sidebar.php";
+require_once "classes/Formulaire.php";
 
 add_action( 'rest_api_init', function() {
 
@@ -141,4 +142,29 @@ add_action( 'rest_api_init', function() {
             ],
         ],
     ] );
+
+    // Formulaires
+    register_rest_route( 'montlucon/v1', '/formulaires', [
+        'methods' => 'GET',
+        'callback' => [new Formulaire(), 'liste_formulaires'],
+    ]);
+
+    register_rest_route( 'montlucon/v1', '/formulaire', [
+        'methods' => 'GET',
+        'callback' => [new Formulaire(), 'formulaire_by_id'],
+        'args' => [
+            'id' => [
+                'validate_callback' => function( $param, $request, $key ) {
+                    return is_numeric( $param );
+                },
+            ],
+        ],
+    ]);
+
+    register_rest_route( 'montlucon/v1', '/submit-form', [
+        'methods' => 'GET',
+        'callback' => [new Formulaire(), 'submit_form'],
+        'permission_callback' => '__return_true',
+    ]);
+
 } );
