@@ -297,9 +297,9 @@ class Options
         }
 
 
-        //
+        // focus = guttemberg
         $focus = [
-            'contenu' => get_field('focus_contenu', 'option') ?? null,
+            'contenu' => get_the_content(null, false, 5) ?? null,
         ];
 
         return [
