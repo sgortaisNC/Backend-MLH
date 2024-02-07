@@ -151,28 +151,50 @@ class Options
         ];
 
         // moteur de recherche
-        $filtres = null;
+        $filtres = [];
 
-        $filtres['types'] = get_terms([
+
+        $filtresTerms['types'] = get_terms([
             'taxonomy' => 'type_de_bien',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
 
-        $filtres['nombre_piece'] = get_terms([
+        foreach ($filtresTerms['types'] as $id => $filtre) {
+            $filtres['types'][] = [
+                'valeur' => $id,
+                'label' => $filtre,
+            ];
+        }
+
+        $filtresTerms['nombre_piece'] = get_terms([
             'taxonomy' => 'nombre_piece',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
 
-        $filtres['villes'] = get_terms([
+        foreach ($filtresTerms['nombre_piece'] as $id => $filtre) {
+            $filtres['nombre_piece'][] = [
+                'valeur' => $id,
+                'label' => $filtre,
+            ];
+        }
+
+        $filtresTerms['villes'] = get_terms([
             'taxonomy' => 'ville_code_postal',
             'fields' => "id=>name",
             'hide_empty' => false,
             'parent' => 0,
         ]);
+
+        foreach ($filtresTerms['villes'] as $id => $filtre) {
+            $filtres['villes'][] = [
+                'valeur' => $id,
+                'label' => $filtre,
+            ];
+        }
 
         //Biens à la une
         $biens = [];
