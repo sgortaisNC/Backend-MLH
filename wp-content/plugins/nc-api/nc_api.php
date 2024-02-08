@@ -92,28 +92,6 @@ add_action( 'rest_api_init', function() {
     register_rest_route( 'montlucon/v1', '/biens-louer', [
         'methods'  => 'GET',
         'callback' => [new Location(), 'list'],
-        'args'     => [
-            'type' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return is_numeric( $param );
-                },
-            ],
-            'nombre' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return is_numeric( $param );
-                },
-            ],
-            'ville' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return is_numeric( $param );
-                },
-            ],
-            'rayon' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return is_numeric( $param );
-                },
-            ],
-        ],
     ] );
 
     register_rest_route( 'montlucon/v1', '/bien-louer/(?P<slug>[\w-]+)', [
