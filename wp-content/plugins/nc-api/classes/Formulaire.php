@@ -30,8 +30,19 @@ class Formulaire
         return rest_ensure_response( $submission_data);
     }
 
-    static function submit_form(  )
+    static function submit_form()
     {
-        return "En cours de développement";
+
+        $id = $_POST['form_id'];
+        unset($_POST['form_id']);
+        $data = [];
+        foreach ($_POST as $key => $value) {
+            $data[] = [
+                "name" => $key,
+                "value" => $value,
+            ];
+        }
+
+        return Forminator_API::add_form_entry($id, $data);
     }
 }

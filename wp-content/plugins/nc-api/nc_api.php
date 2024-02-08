@@ -153,7 +153,7 @@ add_action( 'rest_api_init', function() {
     ]);
 
     register_rest_route( 'montlucon/v1', '/submit-form', [
-        'methods' => 'GET',
+        'methods' => 'POST',
         'callback' => [new Formulaire(), 'submit_form'],
         'permission_callback' => '__return_true',
     ]);
