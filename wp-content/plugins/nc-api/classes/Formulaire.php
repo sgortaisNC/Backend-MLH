@@ -30,14 +30,20 @@ class Formulaire
         return rest_ensure_response($submission_data);
     }
 
-    static function submit_form()
+    static function submit_form(WP_REST_Request $request)
     {
-        return var_dump($_FILES);
+
 
         $id = $_POST['form_id'];
         unset($_POST['form_id']);
         $data = [];
         foreach ($_POST as $key => $value) {
+            $data[] = [
+                "name" => $key,
+                "value" => $value,
+            ];
+        }
+        foreach ($_FILES as $key => $value) {
             $data[] = [
                 "name" => $key,
                 "value" => $value,
