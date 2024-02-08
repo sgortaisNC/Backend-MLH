@@ -36,6 +36,7 @@ class Formulaire
         $id = $_POST['form_id'];
         unset($_POST['form_id']);
         $data = [];
+        return $_POST;
         foreach ($_POST as $key => $value) {
             $data[] = [
                 "name" => $key,
