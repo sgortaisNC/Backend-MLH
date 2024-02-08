@@ -5,7 +5,7 @@
  */
 class Actualite
 {
-    public function single($request)
+    public function single($request): array
     {
         $slug = $request['slug'];
 

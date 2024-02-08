@@ -1,6 +1,6 @@
 <?php
 
-class Page
+class Pages
 {
     private static $type = 'page';
 

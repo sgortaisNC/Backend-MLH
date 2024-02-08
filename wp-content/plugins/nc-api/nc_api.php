@@ -21,8 +21,15 @@ require_once "classes/Options.php";
 require_once "classes/Location.php";
 require_once "classes/Sidebar.php";
 require_once "classes/Formulaire.php";
+require_once "classes/Page.php";
 
 add_action( 'rest_api_init', function() {
+
+    //Page
+    register_rest_route( 'montlucon/v1', '/page/(?P<slug>[\w-]+)', [
+        'methods'  => 'GET',
+        'callback' => [new Page(), 'getOneBySlug']
+    ] );
 
     //Actalités
     register_rest_route( 'montlucon/v1', '/actualite/(?P<slug>[\w-]+)', [
