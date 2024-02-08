@@ -43,11 +43,16 @@ class Formulaire
                 "value" => $value,
             ];
         }
-        foreach ($_FILES as $key => $value) {
-            $data[] = [
-                "name" => $key,
-                "value" => $value,
-            ];
+        foreach ($_FILES as $key => $file) {
+            $upload_overrides = array('test_form' => false);
+            $movefile = wp_handle_upload($file, $upload_overrides);
+            if ($movefile && !isset($movefile['error'])) {
+                // File successfully uploaded, $movefile['file'] contains the path to the uploaded file
+                $data[] = [
+                    "name" => $key,
+                    "value" => $movefile['file'],
+                ];
+            }
         }
 
 
