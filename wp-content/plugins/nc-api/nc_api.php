@@ -44,16 +44,9 @@ add_action( 'rest_api_init', function() {
 
 
     // Offres d'emploi
-    register_rest_route( 'montlucon/v1', '/offre', [
+    register_rest_route( 'montlucon/v1', '/offre/(?P<slug>[\w-]+)', [
         'methods'  => 'GET',
         'callback' => [new OffreEmploi(), 'single'],
-        'args'     => [
-            'id' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return get_post_type( $param ) === 'offre_emploi';
-                },
-            ],
-        ],
     ] );
 
     register_rest_route( 'montlucon/v1', '/offres', [
@@ -96,7 +89,7 @@ add_action( 'rest_api_init', function() {
     ] );
 
     // Locations
-    register_rest_route( 'montlucon/v1', '/locations', [
+    register_rest_route( 'montlucon/v1', '/biens-louer', [
         'methods'  => 'GET',
         'callback' => [new Location(), 'list'],
         'args'     => [
@@ -123,16 +116,9 @@ add_action( 'rest_api_init', function() {
         ],
     ] );
 
-    register_rest_route( 'montlucon/v1', '/location', [
+    register_rest_route( 'montlucon/v1', '/bien-louer/(?P<slug>[\w-]+)', [
         'methods'  => 'GET',
         'callback' => [new Location(), 'single'],
-        'args'     => [
-            'id' => [
-                'validate_callback' => function( $param, $request, $key ) {
-                    return get_post_type( $param ) === 'bien_louer';
-                },
-            ],
-        ],
     ] );
 
     //Sidebar
