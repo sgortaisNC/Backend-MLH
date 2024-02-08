@@ -35,6 +35,7 @@ class Page
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
                 'lien' => get_permalink($id),
                 'formulaire' => $shortcode_id ? Forminator_API::get_form_wrappers($shortcode_id) : null,
+                'formID' => $shortcode_id ? $shortcode_id : null
             ];
         }
 
