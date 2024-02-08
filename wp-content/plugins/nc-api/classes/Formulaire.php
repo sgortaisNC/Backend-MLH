@@ -32,7 +32,7 @@ class Formulaire
 
     static function submit_form()
     {
-        return var_dump($_POST);
+        return var_dump($_FILES);
 
         $id = $_POST['form_id'];
         unset($_POST['form_id']);
