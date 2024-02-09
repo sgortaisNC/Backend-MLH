@@ -10,7 +10,8 @@ class Search
 
 
         nc_sanitize_url($_GET);
-        $search = stripslashes($request['s']);
+        $search = stripslashes($request['s'] ?? null);
+        $search = urldecode($search);
 
 //        $go_out = true;
 //        if (empty($_GET['sr']) && !empty($_GET['sf']) && ($_GET['sf'] == 1)) {

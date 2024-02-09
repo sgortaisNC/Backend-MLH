@@ -138,7 +138,7 @@ add_action( 'rest_api_init', function() {
     ]);
 
     // Page résultat de recherche
-    register_rest_route( 'montlucon/v1', "/recherche/(?P<s>[\wÀ-ÖØ-öø-ÿ'-]+)", [
+    register_rest_route( 'montlucon/v1', "/recherche/(?P<s>[\p{L}\p{M}'\-\d\W]+)", [
         'methods'  => 'GET',
         'callback' => [new Search(), 'results'],
         'args' => [
@@ -148,13 +148,6 @@ add_action( 'rest_api_init', function() {
                     return is_string($param) && strlen($param) > 0;
                 }
             ],
-            'sf' => [
-                'required' => true,
-                'default' => '1',
-                'validate_callback' => function($param, $request, $key) {
-                    return $param === '1';
-                }
-            ]
         ]
     ] );
 
