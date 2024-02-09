@@ -138,7 +138,7 @@ add_action( 'rest_api_init', function() {
     ]);
 
     // Page résultat de recherche
-    register_rest_route( 'montlucon/v1', '/recherche/(?P<s>[\w-]+)', [
+    register_rest_route( 'montlucon/v1', "/recherche/(?P<s>[\wÀ-ÖØ-öø-ÿ'-]+)", [
         'methods'  => 'GET',
         'callback' => [new Search(), 'results'],
         'args' => [
