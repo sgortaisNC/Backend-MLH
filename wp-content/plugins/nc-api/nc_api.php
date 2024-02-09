@@ -22,6 +22,7 @@ require_once "classes/Location.php";
 require_once "classes/Sidebar.php";
 require_once "classes/Formulaire.php";
 require_once "classes/Page.php";
+require_once "classes/Search.php";
 
 add_action( 'rest_api_init', function() {
 
@@ -135,5 +136,26 @@ add_action( 'rest_api_init', function() {
         'callback' => [new Formulaire(), 'submit_form'],
         'permission_callback' => '__return_true',
     ]);
+
+    // Page résultat de recherche
+    register_rest_route( 'montlucon/v1', '/recherche/(?P<s>[\w-]+)', [
+        'methods'  => 'GET',
+        'callback' => [new Search(), 'results'],
+        'args' => [
+            's' => [
+                'required' => true,
+                'validate_callback' => function($param, $request, $key) {
+                    return is_string($param) && strlen($param) > 0;
+                }
+            ],
+            'sf' => [
+                'required' => true,
+                'default' => '1',
+                'validate_callback' => function($param, $request, $key) {
+                    return $param === '1';
+                }
+            ]
+        ]
+    ] );
 
 } );

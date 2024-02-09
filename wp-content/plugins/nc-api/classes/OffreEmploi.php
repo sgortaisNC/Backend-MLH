@@ -51,7 +51,7 @@ class OffreEmploi
         foreach ($filtresTerm['contrats'] as $key => $value) {
             $filtres['contrats'][] = [
                 'value' => $key,
-                'name' => $value,
+                'label' => $value,
             ];
         }
 
@@ -65,7 +65,7 @@ class OffreEmploi
         foreach ($filtresTerm['metiers'] as $key => $value) {
             $filtres['metiers'][] = [
                 'value' => $key,
-                'name' => $value,
+                'label' => $value,
             ];
         }
 

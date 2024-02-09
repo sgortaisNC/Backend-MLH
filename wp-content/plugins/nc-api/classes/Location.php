@@ -73,7 +73,7 @@ class Location
         foreach ($filtresTerm['types'] as $key => $value) {
             $filtres['types'][] = [
                 'value' => $key,
-                'name' => $value,
+                'label' => $value,
             ];
         }
 
@@ -87,7 +87,7 @@ class Location
         foreach ($filtresTerm['nombre_piece'] as $key => $value) {
             $filtres['nombre_piece'][] = [
                 'value' => $key,
-                'name' => $value,
+                'label' => $value,
             ];
         }
 
@@ -105,7 +105,7 @@ class Location
 
             $filtres['villes'][] = [
                 'value' => $key,
-                'name' => $value,
+                'label' => $value,
                 'latitude' => $latitude,
                 'longitude' => $longitude,
             ];
