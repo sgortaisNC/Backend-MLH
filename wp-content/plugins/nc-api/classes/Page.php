@@ -26,6 +26,34 @@ class Page
             }
 
             $id = $pageBySlug->ID;
+
+            $documents = [];
+            $documentsField = get_field('documents', $id);
+
+            if(!empty($documentsField)){
+                foreach ($documentsField as $document) {
+                    if (!empty($document['document'])) {
+                        $documents[] = [
+                            'id' => $document['document'] ? $document['document']['ID'] : null,
+                            'titre' => $document['titre'] ? $document['titre'] : $document['document']['title'],
+                            'lien' => wp_get_attachment_url($document['document']['ID']),
+                        ];
+                    }
+                }
+            }
+
+            $links = [];
+            $liens = get_field('liens', $id);
+
+            if((!empty($liens))){
+                foreach ($liens as $lien) {
+                    $links[] = [
+                        'url' =>  $lien['url'] ?? null,
+                        'titre' => empty($lien['titre']) ? $lien['url'] : $lien['titre'],
+                    ];
+                }
+            }
+
             $page[] = [
                 'id' => $id,
                 'titre' => get_the_title($id),
@@ -35,7 +63,9 @@ class Page
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
                 'lien' => get_permalink($id),
                 'formulaire' => $shortcode_id ? Forminator_API::get_form_wrappers($shortcode_id) : null,
-                'formID' => $shortcode_id ? $shortcode_id : null
+                'formID' => $shortcode_id ? $shortcode_id : null,
+                'documents' => $documents,
+                'liens' => $links
             ];
         }
 
