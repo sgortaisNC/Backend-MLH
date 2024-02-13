@@ -1,6 +1,6 @@
 <?php
 
-if ( !defined('IMAGE_DEFAUT') ) define('IMAGE_DEFAUT', 156);
+if ( !defined('IMAGE_DEFAUT') ) define('IMAGE_DEFAUT', 241);
 
 if ( !defined('HOME') ) define('HOME', 5);
 
