@@ -60,10 +60,10 @@ add_image_size('nc_post_list', 469, 362, true);
 add_image_size('nc_louer_list', 666, 383, true);
 add_image_size('nc_offre_list', 666, 383, true);
 
-add_image_size('nc_post_single', 100, 100, true);
-add_image_size('nc_page_single', 100, 100, true);
-add_image_size('nc_offre_single', 100, 100, true);
-add_image_size('nc_louer_single', 100, 100, true);
+add_image_size('nc_post_single', 1161, 503, true);
+add_image_size('nc_page_single', 1161, 503, true);
+add_image_size('nc_offre_single', 1161, 503, true);
+add_image_size('nc_louer_single', 1161, 503, true);
 
 add_image_size('nc_gutenberg', 100, 100, true);
 add_image_size('nc_elementor_quote', 100, 100, true);
