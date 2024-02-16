@@ -57,7 +57,7 @@ class Actualite
                 'jour' => get_the_date('d', get_the_ID()),
                 'mois' => get_the_date('M', get_the_ID()),
                 'date' => get_the_date('d M Y', get_the_ID()),
-                'lien' => get_permalink(),
+                'lien' => removeDomain(get_permalink()),
             ];
         }
 
