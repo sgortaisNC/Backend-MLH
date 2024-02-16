@@ -37,7 +37,7 @@ class Actualite
 
         $postsRequest = new WP_Query([
             'post_type' => 'post',
-            'posts_per_page' => 12,
+            'posts_per_page' => -1,
             'post_status' => 'publish',
             'orderby' => 'date',
             'order' => 'DESC',
