@@ -67,7 +67,7 @@ class Page
             $page[] = [
                 'id' => $id,
                 'titre' => get_the_title($id),
-                'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'nc_page_single') :
+                'image' => (has_post_thumbnail($id) ? get_the_post_thumbnail_url($id, 'nc_page_single') :
                     $imgDefaut),
                 'contenu' => $text ?? null,
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
