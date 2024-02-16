@@ -14,7 +14,6 @@ class Options
 
     static function header(): array
     {
-
         $menuQuery = wp_get_nav_menu_items(15);
         $menu = [];
         $orderNiveau1 = -1;
@@ -29,7 +28,7 @@ class Options
                 $menu[$orderNiveau1] = [
                     'id' => $item->ID,
                     'title' => $item->title,
-                    'url' => $item->url,
+                    'url' => removeDomain($item->url),
                     'niveau2' => [],
                 ];
                 $currentNiveau1 = &$menu[$orderNiveau1];
@@ -40,7 +39,7 @@ class Options
                     $currentNiveau1['niveau2'][$orderNiveau2] = [
                         'id' => $item->ID,
                         'title' => $item->title,
-                        'url' => $item->url,
+                        'url' => removeDomain($item->url),
                         'niveau3' => [],
                     ];
                     $currentNiveau2 = &$currentNiveau1['niveau2'][$orderNiveau2];
@@ -50,7 +49,7 @@ class Options
                     $currentNiveau2['niveau3'][$orderNiveau3] = [
                         'id' => $item->ID,
                         'title' => $item->title,
-                        'url' => $item->url,
+                        'url' => removeDomain($item->url),
                     ];
                 }
             }

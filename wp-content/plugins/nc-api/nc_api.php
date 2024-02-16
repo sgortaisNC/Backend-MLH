@@ -15,6 +15,11 @@ function wptips_home_url_as_api_url($url) {
     return $url;
 }
 
+function removeDomain($str): string
+{
+    return str_replace(home_url(),'',$str);
+}
+
 require_once "classes/Actualite.php";
 require_once "classes/OffreEmploi.php";
 require_once "classes/Options.php";
