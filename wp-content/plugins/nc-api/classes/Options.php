@@ -221,7 +221,7 @@ class Options
                     'nombre_pieces' => get_the_terms($id, 'nombre_piece') ?
                         join(', ', wp_list_pluck(get_the_terms($id, 'nombre_piece'), 'name')) :
                         null,
-                    'lien' => get_permalink($id),
+                    'lien' => removeDomain(get_permalink($id)),
                 ];
             }
         }
@@ -246,7 +246,7 @@ class Options
                     'jour' => get_the_date('d', $id),
                     'mois' => get_the_date('M', $id),
                     'date' => get_the_date('Y-m-d', $id),
-                    'lien' => get_permalink($id),
+                    'lien' => removeDomain(get_permalink($id)),
                 ];
             }
         }
