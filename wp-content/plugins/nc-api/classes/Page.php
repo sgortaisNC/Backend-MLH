@@ -7,10 +7,19 @@ class Page
 {
     static function getOneBySlug($request): array
     {
+        $the_slug = $request['slug'];
+        $args = array(
+            'name'           => $the_slug,
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1
+        );
+        $my_posts = get_posts($args);
+        $pageBySlug = null;
+        if (!empty($my_posts)){
+            $pageBySlug = $my_posts[0];
+        }
 
-        $slug = $request['slug'];
-
-        $pageBySlug = get_page_by_path($slug, OBJECT, 'page');
         $page = [];
         if ($pageBySlug) {
 
@@ -53,12 +62,13 @@ class Page
                     ];
                 }
             }
-
+            $imgDefaut = wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_page_single') ?
+                wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_page_single')[0] : null;
             $page[] = [
                 'id' => $id,
                 'titre' => get_the_title($id),
                 'image' => (has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'nc_page_single') :
-                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_page_single')[0]),
+                    $imgDefaut),
                 'contenu' => $text ?? null,
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
                 'lien' => get_permalink($id),
