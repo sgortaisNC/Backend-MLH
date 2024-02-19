@@ -21,6 +21,7 @@ function removeDomain($str): string
 }
 
 require_once "classes/Actualite.php";
+require_once "classes/Header.php";
 require_once "classes/OffreEmploi.php";
 require_once "classes/Options.php";
 require_once "classes/Location.php";
@@ -37,7 +38,13 @@ add_action( 'rest_api_init', function() {
         'callback' => [new Page(), 'getOneBySlug']
     ] );
 
-    //Actalités
+    //Header
+    register_rest_route( 'montlucon/v1', '/header/ariane/(?P<slug>[\w-]+)', [
+        'methods'  => 'GET',
+        'callback' => [new Header(), 'ariane']
+    ] );
+
+    //Actualités
     register_rest_route( 'montlucon/v1', '/actualite/(?P<slug>[\w-]+)', [
         'methods'  => 'GET',
         'callback' => [new Actualite(), 'single']

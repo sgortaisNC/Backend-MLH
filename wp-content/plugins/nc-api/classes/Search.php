@@ -55,34 +55,16 @@ class Search
         }
 
 //Pagination
-        $nb_per_page = 15;
-        $nb_delta = 2;
 
-        $nb_results = $swp_query->found_posts;
-        $page_en_cours = empty($_GET['page']) ? 1 : $_GET['page'];
-        $nb_pages = ceil($nb_results / $nb_per_page);
-
-        if ($page_en_cours < 1)
-            $page_en_cours = 1;
-
-        if ($page_en_cours > $nb_pages)
-            $page_en_cours = $nb_pages;
-
-        $nb_start = max(1, $page_en_cours - $nb_delta);
-        $nb_end = min($nb_pages, $page_en_cours + $nb_delta);
 
         $results = [];
         if (!empty($swp_query->posts)) {
-            $results = array_slice($swp_query->posts, ($page_en_cours - 1) * $nb_per_page, $nb_per_page);
+            $results = $swp_query->posts;
         }
 
         return [
             'results' => $results,
-            'nb_results' => $nb_results,
-            'nb_pages' => $nb_pages,
-            'page_en_cours' => $page_en_cours,
-            'nb_start' => $nb_start,
-            'nb_end' => $nb_end,
+            'nombre' => count($results),
             's' => $s,
             'types' => $types,
         ];
