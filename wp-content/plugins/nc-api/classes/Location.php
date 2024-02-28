@@ -48,11 +48,11 @@ class Location
                 'lien' => get_permalink($id),
                 'contactez_nous' => get_permalink(191).'?reference='.get_field('reference_bien', $id),
             ];
-            $location['images'] = [];
+            $location[0]['images'] = [];
             if (!empty($images)) {
                 foreach ($images as $image) {
                     $id = $image['image']['ID'] ?? null;
-                    $location['images'][] = [
+                    $location[0]['images'][] = [
                         'id' => $id,
                         'url' => wp_get_attachment_image_src($id, 'nc_louer_single')[0] ?? null,
                         'alt' => $image['image']['alt'] ?? null,
