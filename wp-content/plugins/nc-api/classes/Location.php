@@ -26,9 +26,14 @@ class Location
                 'image' => has_post_thumbnail($id) ?
                     get_the_post_thumbnail_url($id, 'nc_louer_single') :
                     wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_single')[0],
-                'date' => get_the_date('d M Y', $id),
+                'date' => get_the_date('d F Y', $id),
                 'loyer' => get_field('loyer_charges_comprises', $id) ??
                         get_field('loyer', $id) ?? null,
+                'reference' => get_field('reference_bien', $id) ?? null,
+                'chauffage' => get_field('type_chauffage', $id) ?? null,
+                'charges' => get_field('charges', $id) ?? null,
+                'energie' => get_field('bilan_energetique', $id) ?? null,
+                'ges' => get_field('ges', $id) ?? null,
                 'surface' => get_field('surface', $id) ?? null,
                 'type' => get_the_terms($id, 'type_de_bien') ?
                     join(', ', wp_list_pluck(get_the_terms($id, 'type_de_bien'), 'name')) : null,
@@ -41,17 +46,19 @@ class Location
                     'longitude' => get_field('longitude', $id) ?? null,
                 ],
                 'lien' => get_permalink($id),
+                'contactez_nous' => get_permalink(191).'?reference='.get_field('reference_bien', $id),
             ];
-            if ($images) {
-                foreach ($images as $image) {
-                    $id = $image['image']['ID'];
-                    $location['images'][] = [
-                        'id' => $id,
-                        'url' => wp_get_attachment_image_src($id, 'nc_louer_single')[0],
-                        'alt' => $image['image']['alt'],
-                    ];
-                }
-            }
+//            $location['images'] = [];
+//            if ($images) {
+//                foreach ($images as $image) {
+//                    $id = $image['image']['ID'];
+//                    $location['images'][] = [
+//                        'id' => $id,
+//                        'url' => wp_get_attachment_image_src($id, 'nc_louer_single')[0],
+//                        'alt' => $image['image']['alt'],
+//                    ];
+//                }
+//            }
         }
 
 
