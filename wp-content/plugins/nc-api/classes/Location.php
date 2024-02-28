@@ -48,17 +48,17 @@ class Location
                 'lien' => get_permalink($id),
                 'contactez_nous' => get_permalink(191).'?reference='.get_field('reference_bien', $id),
             ];
-//            $location['images'] = [];
-//            if ($images) {
-//                foreach ($images as $image) {
-//                    $id = $image['image']['ID'];
-//                    $location['images'][] = [
-//                        'id' => $id,
-//                        'url' => wp_get_attachment_image_src($id, 'nc_louer_single')[0],
-//                        'alt' => $image['image']['alt'],
-//                    ];
-//                }
-//            }
+            $location['images'] = [];
+            if (!empty($images)) {
+                foreach ($images as $image) {
+                    $id = $image['image']['ID'] ?? null;
+                    $location['images'][] = [
+                        'id' => $id,
+                        'url' => wp_get_attachment_image_src($id, 'nc_louer_single')[0] ?? null,
+                        'alt' => $image['image']['alt'] ?? null,
+                    ];
+                }
+            }
         }
 
 
