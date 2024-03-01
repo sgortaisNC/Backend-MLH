@@ -60,15 +60,21 @@ class Options
         $alerteOption = get_field('alerte', 'option');
 
         $alerte = [];
-        $today = date('d/m/Y');
+        $today = new DateTime(date("Y-m-d"));
 
-        if (!empty($alerteOption) && $today >= $alerteOption['date_debut'] && $today <= $alerteOption['date_fin']) {
-            $alerte[] = [
-                'titre' => $alerteOption['titre'],
-                'contenu' => $alerteOption['contenu'],
-                'date_debut' => $alerteOption['date_debut'],
-                'date_fin' => $alerteOption['date_fin'],
-            ];
+        if (!empty($alerteOption) && !empty($alerteOption['date_debut']) && !empty($alerteOption['date_fin'])) {
+
+            $ddeb = new DateTime(implode('-', array_reverse(explode('/', $alerteOption['date_debut']))));
+            $dfin = new DateTime(implode('-', array_reverse(explode('/', $alerteOption['date_fin']))));
+
+            if($today->format('U') >= $ddeb->format('U') && $today->format('U') <= $dfin->format('U')) {
+                $alerte[] = [
+                    'titre' => $alerteOption['titre'],
+                    'contenu' => $alerteOption['contenu'],
+                    'date_debut' => $alerteOption['date_debut'],
+                    'date_fin' => $alerteOption['date_fin'],
+                ];
+            }
         }
 
         return [
@@ -310,7 +316,7 @@ class Options
             'biens' => $biens,
             'actualites' => $actualites,
             'chiffres' => $chiffres,
-            'focus' => $focus,
+            'focus' => $focus
         ];
     }
 }
