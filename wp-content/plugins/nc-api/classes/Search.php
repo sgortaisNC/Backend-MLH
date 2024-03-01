@@ -5,7 +5,7 @@
  */
 class Search
 {
-    static function results($request) : array
+    static function results($request): array
     {
 
 
@@ -13,16 +13,7 @@ class Search
         $search = stripslashes($request['s'] ?? null);
         $search = urldecode($search);
 
-//        $go_out = true;
-//        if (empty($_GET['sr']) && !empty($_GET['sf']) && ($_GET['sf'] == 1)) {
-//            $go_out = false;
-//        }
-//        if ($go_out !== false) {
-//            echo 'robot';
-//            exit;
-//        }
-
-    // Query
+        // Query
         $args = [
             'posts_per_page' => -1,
             'post_status' => ['publish'],
@@ -59,7 +50,20 @@ class Search
 
         $results = [];
         if (!empty($swp_query->posts)) {
-            $results = $swp_query->posts;
+            foreach ($swp_query->posts as $post) {
+
+                $chapoLength = 600;
+                $chapo = get_the_excerpt($post->ID) ? str_ireplace($search, '<mark>' . $search . '</mark>', nc_substr(get_the_excerpt($post->ID), $chapoLength))
+                    :
+                    str_ireplace($search, '<mark>' . $search . '</mark>', nc_substr(get_the_content($post->ID), $chapoLength));
+
+                $results[] = [
+                    'id' => $post->ID,
+                    'titre' => $post->post_title,
+                    'resume' => $chapo,
+                    'lien' => removeDomain(get_permalink($post->ID)),
+                ];
+            }
         }
 
         return [
