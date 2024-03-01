@@ -29,7 +29,7 @@ class OffreEmploi
                 'metier' => get_the_terms( $id, 'metier') ?
                     join(', ', wp_list_pluck(get_the_terms( $id, 'metier'), 'name')) : null,
                 'pdf' => get_field('pdf_presentation', $id) ?? null,
-                'lien' => get_permalink($id),
+                'lien' => removeDomain(get_permalink($id)),
             ];
         }
 
@@ -115,7 +115,7 @@ class OffreEmploi
                     join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_contrat'), 'name')) : null,
                 'metier' => get_the_terms(get_the_ID(), 'metier') ?
                     join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'metier'), 'name')) : null,
-                'lien' => get_permalink(),
+                'lien' => removeDomain(get_permalink()),
             ];
         }
 
