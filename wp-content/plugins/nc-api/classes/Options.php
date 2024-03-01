@@ -68,7 +68,7 @@ class Options
             $dfin = new DateTime(implode('-', array_reverse(explode('/', $alerteOption['date_fin']))));
 
             if($today->format('U') >= $ddeb->format('U') && $today->format('U') <= $dfin->format('U')) {
-                $alerte[] = [
+                $alerte = [
                     'titre' => $alerteOption['titre'],
                     'contenu' => $alerteOption['contenu'],
                     'date_debut' => $alerteOption['date_debut'],
