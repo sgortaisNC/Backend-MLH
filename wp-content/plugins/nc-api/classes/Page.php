@@ -64,6 +64,20 @@ class Page
             }
             $imgDefaut = wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_page_single') ?
                 wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_page_single')[0] : null;
+
+            $ariane = [];
+            foreach (get_post_ancestors($id) as $ancestor_id) {
+                $ancestor = get_post($ancestor_id);
+                $ariane[] = [
+                    'label' => $ancestor->post_title,
+                    'url' => get_permalink($ancestor_id),
+                ];
+            }
+            $ariane[] = [
+                'label' => get_the_title($id),
+                'url' => ''
+            ];
+
             $page[] = [
                 'id' => $id,
                 'titre' => get_the_title($id),
@@ -75,7 +89,8 @@ class Page
                 'formulaire' => $shortcode_id ? Forminator_API::get_form_wrappers($shortcode_id) : null,
                 'formID' => $shortcode_id ? $shortcode_id : null,
                 'documents' => $documents,
-                'liens' => $links
+                'liens' => $links,
+                'ariane' => $ariane
             ];
         }
 
