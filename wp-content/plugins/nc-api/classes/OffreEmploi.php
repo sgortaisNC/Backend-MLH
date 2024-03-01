@@ -19,9 +19,6 @@ class OffreEmploi
                 'titre' => get_the_title($id),
                 'description' => get_the_content(null, false, $id),
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
-                'image' => has_post_thumbnail($id) ?
-                    get_the_post_thumbnail_url($id, 'nc_offre_single') :
-                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_offre_single')[0],
                 'date' => get_the_date('d M Y', $id),
                 'reference' => get_field('reference_offre', $id) ?? null,
                 'contrat' => get_the_terms( $id, 'type_de_contrat') ?
@@ -30,6 +27,7 @@ class OffreEmploi
                     join(', ', wp_list_pluck(get_the_terms( $id, 'metier'), 'name')) : null,
                 'pdf' => get_field('pdf_presentation', $id) ?? null,
                 'lien' => removeDomain(get_permalink($id)),
+                'postuler' => removeDomain(get_permalink(POSTULER)) . '?reference=' . (get_field('reference_offre', $id) ?? null),
             ];
         }
 
