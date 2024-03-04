@@ -122,7 +122,7 @@ class Location
         $args = [
             'post_type' => "bien_louer",
             'post_status' => 'publish',
-            'posts_per_page' => 12,
+            'posts_per_page' => -1,
             'orderby' => 'date',
             'paged' => (!empty($_GET['pg']) ? $_GET['pg'] : 1),
         ];
@@ -149,6 +149,23 @@ class Location
             ];
         }
 
+        if (!empty($_GET['surface'])){
+            $args['meta_query'][] = [
+                'key' => 'surface',
+                'value' => $_GET['surface'],
+                'compare' => '<=',
+                'type' => 'NUMERIC'
+            ];
+        }
+        if (!empty($_GET['loyer'])){
+            $args['meta_query'][] = [
+                'key' => 'loyer_charges_comprises',
+                'value' => $_GET['loyer'],
+                'compare' => '<=',
+                'type' => 'NUMERIC'
+            ];
+        }
+
         if (!empty($_GET['ville']) && !empty($_GET['rayon'])) {
 
         } elseif(!empty($_GET['ville'])) {
@@ -161,7 +178,6 @@ class Location
                 ]
             ];
         }
-
 
         $louerQuery = new WP_Query($args);
 
