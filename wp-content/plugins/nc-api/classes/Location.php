@@ -127,7 +127,7 @@ class Location
             'paged' => (!empty($_GET['pg']) ? $_GET['pg'] : 1),
         ];
 
-        if (!empty($_GET['type'])) {
+        if (!empty($_GET['type']) && $_GET['type'] !== 'null') {
             $args['tax_query'][] = [
                 [
                     'taxonomy' => 'type_de_bien',
@@ -188,6 +188,8 @@ class Location
 
             if (!empty($_GET['rayon']) && !empty($_GET['ville'])) {
                 $ville = get_term($_GET['ville'], 'ville_code_postal');
+                var_dump($_GET['ville'],$ville);
+                die();
                 $latitude = get_field('latitude', $ville);
                 $longitude = get_field('longitude', $ville);
                 $coordonnees = [
