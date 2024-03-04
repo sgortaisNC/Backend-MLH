@@ -188,8 +188,7 @@ class Location
 
             if (!empty($_GET['rayon']) && !empty($_GET['ville'])) {
                 $ville = get_term($_GET['ville'], 'ville_code_postal');
-                var_dump($_GET['ville'],$ville);
-                die();
+
                 $latitude = get_field('latitude', $ville);
                 $longitude = get_field('longitude', $ville);
                 $coordonnees = [
@@ -200,7 +199,8 @@ class Location
                 if ($coordonnees['latitude'] && $coordonnees['longitude'] && get_field('latitude') && get_field('longitude')) {
                     $louer = Location::get_bien_louer_rayon($ville->term_id, $_GET['rayon']);
                 }
-            } else {
+            }
+            else {
 
                 $defautImg = wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list') ?
                     wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0] : null;
@@ -272,6 +272,24 @@ class Location
                     'terms' => $_GET['nombre'],
                     'operator' => 'IN'
                 ]
+            ];
+        }
+
+        if (!empty($_GET['surface'])){
+            $args['meta_query'][] = [
+                'key' => 'surface',
+                'value' => $_GET['surface'],
+                'compare' => '<=',
+                'type' => 'NUMERIC'
+            ];
+        }
+
+        if (!empty($_GET['loyer'])){
+            $args['meta_query'][] = [
+                'key' => 'loyer_charges_comprises',
+                'value' => $_GET['loyer'],
+                'compare' => '<=',
+                'type' => 'NUMERIC'
             ];
         }
 
