@@ -199,12 +199,16 @@ class Location
                     $louer = Location::get_bien_louer_rayon($ville->term_id, $_GET['rayon']);
                 }
             } else {
+
+                $defautImg = wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list') ?
+                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0] : null;
+
                 $louer[] = [
                     'id' => get_the_ID(),
                     'titre' => get_the_title(),
                     'image' => has_post_thumbnail(get_the_ID()) ?
                         get_the_post_thumbnail_url(get_the_ID(), 'nc_louer_list') :
-                        wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0],
+                        $defautImg,
                     'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
                         join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
                         null,
