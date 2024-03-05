@@ -224,7 +224,7 @@ class Location
                     'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
                         join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
                         null,
-                    'lien' => get_permalink(),
+                    'lien' => removeDomain(get_permalink()),
                 ];
             }
         }
@@ -336,7 +336,7 @@ class Location
                     'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
                         join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
                         null,
-                    'lien' => get_permalink(),
+                    'lien' => removeDomain(get_permalink()),
                 ];
             }
         }

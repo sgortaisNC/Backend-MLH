@@ -65,7 +65,7 @@ foreach ($dataAllier as $commune) {
     }
 
     // Vérifie si la commune existe déjà dans la taxonomie
-    $existing_term = get_term_by('name', $commune_name, 'ville_code_postal');
+    $existing_term = get_term_by('name', $code_postal." ".$commune_name, 'ville_code_postal');
 
     if ($existing_term) {
         // La commune existe déjà, on met à jour ses métadonnées
@@ -89,6 +89,7 @@ foreach ($dataAllier as $commune) {
             echo "Commune $commune_name créée avec succès\n";
         } else {
             var_dump("erreur");
+            die();
             // La création de la commune a échoué, on affiche un message d'erreur
             echo "Erreur lors de la création de la commune $commune_name : " . $term->get_error_message() . "\n";
         }
@@ -114,7 +115,7 @@ foreach ($dataPuyDeDome as $commune) {
     }
 
     // Vérifie si la commune existe déjà dans la taxonomie
-    $existing_term = get_term_by('name', $commune_name, 'ville_code_postal');
+    $existing_term = get_term_by('name', $code_postal." ".$commune_name, 'ville_code_postal');
 
     if ($existing_term) {
         // La commune existe déjà, on met à jour ses métadonnées
@@ -163,7 +164,7 @@ foreach ($dataCher as $commune) {
     }
 
     // Vérifie si la commune existe déjà dans la taxonomie
-    $existing_term = get_term_by('name', $commune_name, 'ville_code_postal');
+    $existing_term = get_term_by('name', $code_postal." ".$commune_name, 'ville_code_postal');
 
     if ($existing_term) {
         // La commune existe déjà, on met à jour ses métadonnées
