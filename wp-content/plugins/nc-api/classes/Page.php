@@ -78,12 +78,13 @@ class Page
                 'url' => ''
             ];
 
+            $content = apply_filters( 'the_content', $text );
             $page[] = [
                 'id' => $id,
                 'titre' => get_the_title($id),
                 'image' => (has_post_thumbnail($id) ? get_the_post_thumbnail_url($id, 'nc_page_single') :
                     $imgDefaut),
-                'contenu' => $text ?? null,
+                'contenu' => $content ?? null,
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
                 'lien' => get_permalink($id),
                 'formulaire' => $shortcode_id ? Forminator_API::get_form_wrappers($shortcode_id) : null,
