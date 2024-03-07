@@ -1,0 +1,60 @@
+
+.temoignage{
+    display: flex;
+    gap: 34px;
+    align-items: self-end;
+    position: relative;
+}
+
+.temoignage figure{
+    flex: none;
+    width: 296px;
+    height: 335px;
+    margin-bottom: 0;
+    display: block;
+    &::after{
+        position: absolute;
+        content: '';
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 75px;
+        background: white;
+        z-index: 2;
+        clip-path: polygon(296px 0, 296px 0, 100% 100%, 0 100%);
+    }
+}
+
+.temoignage figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.temoignage__content{
+    flex: 1;
+    background: linear-gradient(213deg, #dcf3f8 0%, #dcf3f8 -10%, #f6faea 100%);
+    position: relative;
+    padding: 66px 80px 104px 110px;
+
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: #4b7388;
+}
+
+.temoignage__content svg{
+    position: absolute;
+    top: 44px;
+    left: -16px;
+    z-index: 2;
+}
+
+.temoignage__source{
+    font-weight: bold;
+    font-size: 21px;
+    line-height: 25px;
+    text-align: left;
+    color: #04add1;
+}

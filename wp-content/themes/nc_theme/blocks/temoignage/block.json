@@ -1,0 +1,16 @@
+{
+    "name": "nc/temoignage",
+    "title": "Témoignage",
+    "description": "Un bloc pour afficher un témoignage ou une citation.",
+    "style": [ "file:./temoignage.css" ],
+    "category": "formatting",
+    "icon": "admin-comments",
+    "keywords": ["testimonial", "quote"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "temoignage.php"
+    },
+    "supports": {
+        "anchor": false
+    }
+}

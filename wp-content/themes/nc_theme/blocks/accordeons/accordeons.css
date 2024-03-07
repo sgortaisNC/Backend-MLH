@@ -43,14 +43,14 @@
     padding-left: 35px;
     padding-right: 35px;
     border-bottom: 1px solid #04add1;
-    line-clamp: 1;
-    display: -webkit-box;
     overflow: hidden;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
     text-overflow: ellipsis;
-    white-space: nowrap;
     transition: all 0.5s ease;
-
 }
+
 
 .accordeon svg{
     margin-right: 20px;

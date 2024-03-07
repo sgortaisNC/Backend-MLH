@@ -51,6 +51,7 @@ function tt3child_register_acf_blocks() {
     register_block_type( __DIR__ . '/blocks/avant' );
     register_block_type( __DIR__ . '/blocks/chiffres' );
     register_block_type( __DIR__ . '/blocks/accordeons' );
+    register_block_type( __DIR__ . '/blocks/temoignage' );
 }
 // Here we call our register_acf_block() function on init.
 add_action( 'init', 'tt3child_register_acf_blocks' );

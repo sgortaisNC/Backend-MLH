@@ -66,7 +66,7 @@ add_image_size('nc_offre_single', 1161, 503, true);
 add_image_size('nc_louer_single', 1161, 503, true);
 
 add_image_size('nc_gutenberg', 100, 100, true);
-add_image_size('nc_elementor_quote', 100, 100, true);
+add_image_size('temoignage', 296, 335, true);
 add_image_size('nc_elementor_featured', 100, 100, true);
 add_image_size('nc_elementor_carousel', 100, 100, true);
 
