@@ -1,1 +1,0 @@
-{"version":3,"file":"./style-index.css","mappings":";;;AACI;EACI;AAAR,C","sources":["webpack://featured-image/./src/style.scss"],"sourcesContent":[".wp-block-nc-featured-image {\r\n    figcaption {\r\n        display: none;\r\n    }\r\n}\r\n"],"names":[],"sourceRoot":""}

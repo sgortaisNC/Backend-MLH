@@ -1,0 +1,16 @@
+{
+    "name": "nc/exergue",
+    "title": "Mise en avant",
+    "description": "A custom testimonial block that uses ACF fields.",
+    "style": [ "file:./avant.css" ],
+    "category": "formatting",
+    "icon": "admin-comments",
+    "keywords": ["testimonial", "quote"],
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "avant.php"
+    },
+    "supports": {
+        "anchor": true
+    }
+}
