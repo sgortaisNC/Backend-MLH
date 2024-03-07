@@ -1,0 +1,12 @@
+{
+    "name": "nc/chiffres",
+    "title": "Chiffres clés",
+    "description": "Affiche des chiffres clés",
+    "style": [ "file:./chiffres.css" ],
+    "category": "formatting",
+    "icon": "awards",
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "chiffres.php"
+    }
+}

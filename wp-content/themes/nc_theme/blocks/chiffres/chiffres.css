@@ -1,0 +1,50 @@
+.chiffres {
+    display: flex;
+    > * {
+        flex: 1;
+    }
+}
+
+.chiffre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+
+    font-weight: 500;
+    font-size: 25px;
+    letter-spacing: 0.02em;
+    line-height: 26px;
+    color: #4b7388;
+}
+
+.chiffre:not(:last-child)::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 1px;
+    background-color: #A7C830;
+}
+
+.chiffre b {
+    display: block;
+    font-weight: normal;
+    font-size: 55px;
+    letter-spacing: 0.02em;
+    line-height: 39px;
+    color: #a7c830;
+}
+
+@media (max-width: 1000px) {
+    .chiffres {
+        flex-direction: column;
+    }
+
+    .chiffre:not(:last-child)::after {
+        display: none;
+    }
+}
