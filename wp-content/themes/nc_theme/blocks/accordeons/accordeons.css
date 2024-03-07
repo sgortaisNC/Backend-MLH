@@ -1,0 +1,62 @@
+.accordeon{
+    margin-bottom: 15px;
+    display: grid;
+    grid-template-rows: 81px 0fr;
+    overflow: hidden;
+    max-height: 81px;
+    transition: max-height 1s ease;
+}
+.accordeon.active{
+    grid-template-rows: 81px 1fr;
+    max-height: 1000px;
+}
+.accordeon .accordeon__title{
+    display: flex;
+    align-items: center;
+    height: 81px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.accordeon__content{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: left;
+    color: #4b7388;
+    padding: 35px;
+    border-radius: 8px;
+    background: #F5F6F8;
+    border-top: 17px solid white;
+}
+
+.accordeon button{
+    background: transparent;
+    width: 100%;
+    border: none;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 78px;
+    text-align: left;
+    color: #04add1;
+    align-items: center;
+    padding-left: 35px;
+    padding-right: 35px;
+    border-bottom: 1px solid #04add1;
+    line-clamp: 1;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: all 0.5s ease;
+
+}
+
+.accordeon svg{
+    margin-right: 20px;
+}
+
+.accordeon.active button{
+    color: white;
+    background: #04add1;
+}

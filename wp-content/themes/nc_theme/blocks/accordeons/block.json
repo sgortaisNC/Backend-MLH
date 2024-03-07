@@ -1,0 +1,12 @@
+{
+    "name": "nc/accordeons",
+    "title": "Accordéons",
+    "description": "Affiche des accordéons",
+    "style": [ "file:./accordeons.css" ],
+    "category": "formatting",
+    "icon": "insert",
+    "acf": {
+        "mode": "preview",
+        "renderTemplate": "accordeons.php"
+    }
+}
