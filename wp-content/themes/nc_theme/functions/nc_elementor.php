@@ -61,7 +61,7 @@ add_action('elementor/widgets/register', function($widgets_manager) {
 // Suppression des menus
 
 add_action('admin_menu', function() {
-    if ( !UserApi::isAdministrator() ) {
+    if ( !User::isAdministrator() ) {
         remove_menu_page('elementor');
         remove_menu_page('edit.php?post_type=elementor_library');
     }
