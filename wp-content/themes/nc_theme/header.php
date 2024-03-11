@@ -15,5 +15,5 @@
 
         <?= wp_head(); ?>
     </head>
-    <body class="stuck <?= User::isLogged() && is_admin_bar_showing() ? 'admin_bar' : ''; ?>">
+    <body class="stuck <?= UserApi::isLogged() && is_admin_bar_showing() ? 'admin_bar' : ''; ?>">
         <?= do_action('nc_header'); ?>

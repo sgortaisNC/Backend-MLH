@@ -28,6 +28,7 @@ require_once "classes/Sidebar.php";
 require_once "classes/Formulaire.php";
 require_once "classes/Page.php";
 require_once "classes/Search.php";
+require_once "classes/UserApi.php";
 
 add_action( 'rest_api_init', function() {
 
@@ -156,4 +157,9 @@ add_action( 'rest_api_init', function() {
         ]
     ] );
 
+    register_rest_route('montlucon/v1','/connect',[
+        'methods' => 'POST',
+        'callback' => [new UserApi(), 'custom_auth_callback'],
+        'permission_callback' => '__return_true',
+    ]);
 } );
