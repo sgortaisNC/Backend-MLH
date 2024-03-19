@@ -310,13 +310,50 @@ class Options
             'test' => "test"
         ];
 
+        wp_reset_postdata();
+
+        $argsbiens = [
+            'post_type' => 'bien_louer',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+        ];
+
+        $biensMap = [];
+        $queryBiens = new WP_Query($argsbiens);
+        while ($queryBiens->have_posts()) {
+            $bm = $queryBiens->the_post();
+            $biensMap[] = [
+                'id' => get_the_ID(),
+                'titre' => get_the_title(),
+                'image' => ',',
+                'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
+                    join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
+                    null,
+                'ville' => get_the_terms(get_the_ID(), 'ville_code_postal') ?
+                    join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'ville_code_postal'), 'name')) :
+                    null,
+                'loyer' => get_field('loyer_charges_comprises') ?? null,
+                'surface' => get_field('surface') ?? null,
+                'longitude' => get_field('longitude') ?? null,
+                'latitude' => get_field('latitude') ?? null,
+                'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
+                    join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
+                    null,
+                'lien' => removeDomain(get_permalink()),
+            ];
+
+            wp_reset_postdata();
+        }
+
+
         return [
             'baseline' => $baseline,
             'filtres' => $filtres,
             'biens' => $biens,
             'actualites' => $actualites,
             'chiffres' => $chiffres,
-            'focus' => $focus
+            'focus' => $focus,
+            'biensMap' => $biensMap
         ];
     }
 }
