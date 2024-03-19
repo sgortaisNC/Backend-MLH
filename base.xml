@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<client>
+    <!-- BEGIN LOOP -->
+    <annonce>
+        <reference>xxx</reference>
+        <titre>xxx</titre>
+        <texte>xxx</texte>
+        <date_saisie>xxx</date_saisie>
+        <photos>
+            <photo>https://monsite.fr/nom_photo_1.jpg</photo>
+            <photo>https://monsite.fr/nom_photo_2.jpg</photo>
+        </photos>
+        <code_type>XXXX</code_type>
+        <code_postal_internet>xxx</code_postal>
+        <ville_internet>xxx</ville>
+        <code_insee_internet>xxx</code_insee_internet>
+        <surface>xxx</surface>
+        <dpe_etiquette_ges>x</dpe_etiquette_ges>
+        <dpe_valeur_ges>xxx</dpe_valeur_ges>
+        <dpe_etiquette_conso>x</dpe_etiquette_conso>
+        <dpe_valeur_conso>xxx</dpe_valeur_conso>
+        <dpe_date_realisation>01/01/2021</dpe_date_realisation>
+        <certificat_plomb>O</certificat_plomb>
+        <type>X</type>
+        <prix>xxxxxx</prix>
+    </annonce>
+    <!-- END LOOP -->
+
+</client>

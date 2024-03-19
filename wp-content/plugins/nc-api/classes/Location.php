@@ -46,7 +46,7 @@ class Location
                     'longitude' => get_field('longitude', $id) ?? null,
                 ],
                 'lien' => get_permalink($id),
-                'contactez_nous' => get_permalink(191).'?reference='.get_field('reference_bien', $id),
+                'contactez_nous' => get_permalink(191) . '?reference=' . get_field('reference_bien', $id),
             ];
             $location[0]['images'] = [];
             if (!empty($images)) {
@@ -149,7 +149,7 @@ class Location
             ];
         }
 
-        if (!empty($_GET['surface'])){
+        if (!empty($_GET['surface'])) {
             $args['meta_query'][] = [
                 'key' => 'surface',
                 'value' => $_GET['surface'],
@@ -157,7 +157,7 @@ class Location
                 'type' => 'NUMERIC'
             ];
         }
-        if (!empty($_GET['loyer'])){
+        if (!empty($_GET['loyer'])) {
             $args['meta_query'][] = [
                 'key' => 'loyer_charges_comprises',
                 'value' => $_GET['loyer'],
@@ -167,8 +167,31 @@ class Location
         }
 
         if (!empty($_GET['ville']) && !empty($_GET['rayon'])) {
+            // Récupération des villes dans un rayon de X kmbresso
+            $centreVille = get_term_by('id',$_GET['ville'], 'ville_code_postal');
+            $lat1 = get_field('latitude', 'ville_code_postal_' . $centreVille->term_id);
+            $long1 = get_field('longitude', 'ville_code_postal_' . $centreVille->term_id);
+            $villes = [];
+            $tax = get_terms(['taxonomy' => 'ville_code_postal']);
+            foreach ($tax as $t) {
+                $latitude = get_field('latitude', 'ville_code_postal_' . $t->term_id);
+                $longitude = get_field('longitude', 'ville_code_postal_' . $t->term_id);
+                $distance = distance_entre_deux_points($lat1, $long1, $latitude, $longitude);
+                if ($distance <= $_GET['rayon']) {
+                    $villes[] = $t->term_id;
+                }
+            }
 
-        } elseif(!empty($_GET['ville'])) {
+            $args['tax_query'][] = [
+                [
+                    'taxonomy' => 'ville_code_postal',
+                    'field' => 'term_taxonomy_id',
+                    'terms' => $villes,
+                    'operator' => 'IN'
+                ]
+            ];
+
+        } elseif (!empty($_GET['ville'])) {
             $args['tax_query'][] = [
                 [
                     'taxonomy' => 'ville_code_postal',
@@ -186,47 +209,30 @@ class Location
         while ($louerQuery->have_posts()) {
             $louerQuery->the_post();
 
-            if (!empty($_GET['rayon']) && !empty($_GET['ville'])) {
-                $ville = get_term($_GET['ville'], 'ville_code_postal');
+            $defautImg = wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list') ?
+                wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0] : null;
 
-                $latitude = get_field('latitude', $ville);
-                $longitude = get_field('longitude', $ville);
-                $coordonnees = [
-                    'latitude' => $latitude,
-                    'longitude' => $longitude,
-                ];
-
-                if ($coordonnees['latitude'] && $coordonnees['longitude'] && get_field('latitude') && get_field('longitude')) {
-                    $louer = Location::get_bien_louer_rayon($ville->term_id, $_GET['rayon']);
-                }
-            }
-            else {
-
-                $defautImg = wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list') ?
-                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0] : null;
-
-                $louer[] = [
-                    'id' => get_the_ID(),
-                    'titre' => get_the_title(),
-                    'image' => has_post_thumbnail(get_the_ID()) ?
-                        get_the_post_thumbnail_url(get_the_ID(), 'nc_louer_list') :
-                        $defautImg,
-                    'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
-                        join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
-                        null,
-                    'ville' => get_the_terms(get_the_ID(), 'ville_code_postal') ?
-                        join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'ville_code_postal'), 'name')) :
-                        null,
-                    'loyer' => get_field('loyer_charges_comprises') ?? null,
-                    'surface' => get_field('surface') ?? null,
-                    'longitude' => get_field('longitude') ?? null,
-                    'latitude' => get_field('latitude') ?? null,
-                    'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
-                        join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
-                        null,
-                    'lien' => removeDomain(get_permalink()),
-                ];
-            }
+            $louer[] = [
+                'id' => get_the_ID(),
+                'titre' => get_the_title(),
+                'image' => has_post_thumbnail(get_the_ID()) ?
+                    get_the_post_thumbnail_url(get_the_ID(), 'nc_louer_list') :
+                    $defautImg,
+                'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
+                    join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
+                    null,
+                'ville' => get_the_terms(get_the_ID(), 'ville_code_postal') ?
+                    join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'ville_code_postal'), 'name')) :
+                    null,
+                'loyer' => get_field('loyer_charges_comprises') ?? null,
+                'surface' => get_field('surface') ?? null,
+                'longitude' => get_field('longitude') ?? null,
+                'latitude' => get_field('latitude') ?? null,
+                'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
+                    join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
+                    null,
+                'lien' => removeDomain(get_permalink()),
+            ];
         }
 
         wp_reset_postdata();
@@ -237,111 +243,26 @@ class Location
             'max_num_pages' => $louerQuery->max_num_pages,
         ];
     }
+}
 
-    function get_bien_louer_rayon($ville_term_id, $rayon) {
+function distance_entre_deux_points($lat1, $lon1, $lat2, $lon2) {
+    // Rayon de la Terre en kilomètres
+    $R = 6371;
 
-        $ville_latitude = get_field('latitude', 'ville_code_postal_' . $ville_term_id);
-        $ville_longitude = get_field('longitude', 'ville_code_postal_' . $ville_term_id);
-        $r = 6371;
-        $louer = [];
+    // Conversion des degrés en radians
+    $lat1 = deg2rad($lat1);
+    $lon1 = deg2rad($lon1);
+    $lat2 = deg2rad($lat2);
+    $lon2 = deg2rad($lon2);
 
-        $args = [
-            'post_type' => "bien_louer",
-            'post_status' => 'publish',
-            'posts_per_page' => 12,
-            'orderby' => 'date',
-            'paged' => (!empty($_GET['pg']) ? $_GET['pg'] : 1),
-        ];
+    // Différence de latitudes et de longitudes
+    $dLat = $lat2 - $lat1;
+    $dLon = $lon2 - $lon1;
 
-        if (!empty($_GET['type'])) {
-            $args['tax_query'][] = [
-                [
-                    'taxonomy' => 'type_de_bien',
-                    'field' => 'term_taxonomy_id',
-                    'terms' => $_GET['type'],
-                    'operator' => 'IN'
-                ]
-            ];
-        }
+    // Formule de la distance Haversine
+    $a = sin($dLat/2) * sin($dLat/2) + cos($lat1) * cos($lat2) * sin($dLon/2) * sin($dLon/2);
+    $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+    $distance = $R * $c;
 
-        if (!empty($_GET['nombre'])) {
-            $args['tax_query'][] = [
-                [
-                    'taxonomy' => 'nombre_piece',
-                    'field' => 'term_taxonomy_id',
-                    'terms' => $_GET['nombre'],
-                    'operator' => 'IN'
-                ]
-            ];
-        }
-
-        if (!empty($_GET['surface'])){
-            $args['meta_query'][] = [
-                'key' => 'surface',
-                'value' => $_GET['surface'],
-                'compare' => '<=',
-                'type' => 'NUMERIC'
-            ];
-        }
-
-        if (!empty($_GET['loyer'])){
-            $args['meta_query'][] = [
-                'key' => 'loyer_charges_comprises',
-                'value' => $_GET['loyer'],
-                'compare' => '<=',
-                'type' => 'NUMERIC'
-            ];
-        }
-
-        if (!empty($_GET['ville']) && !empty($_GET['rayon'])) {
-
-        } elseif(!empty($_GET['ville'])) {
-            $args['tax_query'][] = [
-                [
-                    'taxonomy' => 'ville_code_postal',
-                    'field' => 'term_taxonomy_id',
-                    'terms' => $_GET['ville'],
-                    'operator' => 'IN'
-                ]
-            ];
-        }
-
-        $query_bien_louer = new WP_Query($args);
-
-        while ($query_bien_louer->have_posts()){
-            $query_bien_louer->the_post();
-
-            $bien_louer = get_post();
-            $bien_louer_latitude = get_field('latitude', $bien_louer->ID);
-            $bien_louer_longitude = get_field('longitude', $bien_louer->ID);
-
-            $distance_bien_louer = $r * acos(sin(deg2rad($ville_latitude)) * sin(deg2rad($bien_louer_latitude)) + cos(deg2rad($ville_latitude)) * cos(deg2rad($bien_louer_latitude)) * cos(deg2rad($bien_louer_longitude) - deg2rad($ville_longitude)));
-            if ($distance_bien_louer <= $rayon) {
-                $louer[] = [
-                    'id' => get_the_ID(),
-                    'titre' => get_the_title(),
-                    'image' => has_post_thumbnail(get_the_ID()) ?
-                        get_the_post_thumbnail_url(get_the_ID(), 'nc_louer_list') :
-                        wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_louer_list')[0],
-                    'type' => get_the_terms(get_the_ID(), 'type_de_bien') ?
-                        join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'type_de_bien'), 'name')) :
-                        null,
-                    'ville' => get_the_terms(get_the_ID(), 'ville_code_postal') ?
-                        join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'ville_code_postal'), 'name')) :
-                        null,
-                    'loyer' => get_field('loyer_charges_comprises') ?? null,
-                    'surface' => get_field('surface') ?? null,
-                    'longitude' => get_field('longitude') ?? null,
-                    'latitude' => get_field('latitude') ?? null,
-                    'nombre_pieces' => get_the_terms(get_the_ID(), 'nombre_piece') ?
-                        join(', ', wp_list_pluck(get_the_terms(get_the_ID(), 'nombre_piece'), 'name')) :
-                        null,
-                    'lien' => removeDomain(get_permalink()),
-                ];
-            }
-        }
-        return $louer;
-
-    }
-
+    return $distance;
 }

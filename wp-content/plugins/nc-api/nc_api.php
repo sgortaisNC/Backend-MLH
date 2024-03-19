@@ -101,7 +101,7 @@ add_action( 'rest_api_init', function() {
         'callback' => [new Location(), 'list'],
     ] );
 
-    register_rest_route( 'montlucon/v1', '/bien-louer/(?P<slug>[\w-]+)', [
+    register_rest_route( 'montlucon/v1', '/bien-louer/(?P<slug>[a-zA-Z0-9-%]+)', [
         'methods'  => 'GET',
         'callback' => [new Location(), 'single'],
     ] );

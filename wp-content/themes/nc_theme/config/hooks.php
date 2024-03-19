@@ -40,3 +40,20 @@ add_action('wp', function() {
         }
     }
 }, 1);
+
+
+add_action('save_post', 'my_acf_save_post',10,3);
+function my_acf_save_post( $post_id ) {
+    $images = get_attached_media('image', $post_id);
+
+    if (count($images) > 1) {
+        $images = array_slice($images, 1);
+        $imgs = [];
+        foreach ($images as $image) {
+            $imgs[] = ['image' => $image->ID];
+        }
+
+        update_field('images', $imgs, $post_id);
+    }
+}
+
