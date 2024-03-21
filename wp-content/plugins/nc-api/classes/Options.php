@@ -298,7 +298,7 @@ class Options
                 $chiffres[] = [
                     'texte' => $chiffre['texte'] ?? null,
                     'chiffre' => $chiffre['chiffre'] ?? null,
-                    'pictogramme' => wp_get_attachment_image_src($chiffre['pictogramme']['ID'], 'nc_home_actualites')[0] ?? null,
+                    'pictogramme' => wp_get_attachment_image_src($chiffre['pictogramme']['ID'], 'nc_chiffre')[0] ?? null,
                 ];
             }
         }

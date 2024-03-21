@@ -51,9 +51,8 @@ add_action('wp_enqueue_scripts', function() {
 add_image_size('nc_header', 235, 121, true);
 add_image_size('nc_footer', 216, 97, true);
 
-add_image_size('nc_home', 100, 100, true);
+add_image_size('nc_chiffre', 75, 75, true);
 add_image_size('nc_home_baseline', 1920, 717, true);
-add_image_size('nc_home_alaune', 100, 100, true);
 add_image_size('nc_home_actualites', 469, 362, true);
 
 add_image_size('nc_post_list', 469, 362, true);
@@ -65,16 +64,14 @@ add_image_size('nc_page_single', 1161, 503, true);
 add_image_size('nc_offre_single', 1161, 503, true);
 add_image_size('nc_louer_single', 1161, 503, true);
 
-add_image_size('nc_gutenberg', 100, 100, true);
 add_image_size('temoignage', 296, 335, true);
-add_image_size('nc_elementor_featured', 100, 100, true);
-add_image_size('nc_elementor_carousel', 100, 100, true);
 
 add_filter('image_size_names_choose', function($sizes) {
     return array_merge($sizes, [
         'nc_header' => "Header",
         'nc_footer' => "Footer",
         'nc_home' => "Page d'accueil",
+        'nc_chiffre' => "Page d'accueil - Chiffres clés",
         'nc_post_list' => "Liste des actualités",
         'nc_post_single' => "Détail d'une actualité",
         'nc_page_single' => "Page standard",
