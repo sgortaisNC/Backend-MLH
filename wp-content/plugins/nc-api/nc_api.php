@@ -162,4 +162,10 @@ add_action( 'rest_api_init', function() {
         'callback' => [new UserApi(), 'custom_auth_callback'],
         'permission_callback' => '__return_true',
     ]);
+
+    register_rest_route('montlucon/v1','/sitemap',[
+        'methods' => 'GET',
+        'callback' => [new Options(), 'sitemapXML'],
+        'permission_callback' => '__return_true',
+    ]);
 } );

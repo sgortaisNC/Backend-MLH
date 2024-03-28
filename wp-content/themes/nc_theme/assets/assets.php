@@ -51,7 +51,7 @@ add_action('wp_enqueue_scripts', function() {
 add_image_size('nc_header', 235, 121, true);
 add_image_size('nc_footer', 216, 97, true);
 
-add_image_size('nc_chiffre', 75, 75, true);
+add_image_size('nc_chiffre', 88, 88, true);
 add_image_size('nc_home_baseline', 1920, 717, true);
 add_image_size('nc_home_actualites', 469, 362, true);
 

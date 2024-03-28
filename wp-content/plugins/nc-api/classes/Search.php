@@ -52,7 +52,7 @@ class Search
         if (!empty($swp_query->posts)) {
             foreach ($swp_query->posts as $post) {
 
-                $chapoLength = 600;
+                $chapoLength = 1500;
                 $chapo = get_the_excerpt($post->ID) ? str_ireplace($search, '<mark>' . $search . '</mark>', nc_substr(get_the_excerpt($post->ID), $chapoLength))
                     :
                     str_ireplace($search, '<mark>' . $search . '</mark>', nc_substr(get_the_content($post->ID), $chapoLength));

@@ -17,7 +17,7 @@ class Actualite
                 'id' => $id,
                 'titre' => get_the_title($id),
                 'image' => (has_post_thumbnail($id) ? get_the_post_thumbnail_url($id, 'nc_post_single') :
-                    wp_get_attachment_image_src(IMAGE_DEFAUT, 'nc_post_single')[0]),
+                    false),
                 'contenu' => get_the_content(null, false, $id) ?? null,
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
                 'jour' => get_the_date('d', $id),

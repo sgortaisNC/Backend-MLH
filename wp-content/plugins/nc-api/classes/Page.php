@@ -82,8 +82,7 @@ class Page
             $page[] = [
                 'id' => $id,
                 'titre' => get_the_title($id),
-                'image' => (has_post_thumbnail($id) ? get_the_post_thumbnail_url($id, 'nc_page_single') :
-                    $imgDefaut),
+                'image' => (has_post_thumbnail($id) ? get_the_post_thumbnail_url($id, 'nc_page_single') : false),
                 'contenu' => $content ?? null,
                 'chapo' => has_excerpt($id) ? get_the_excerpt($id) : null,
                 'lien' => get_permalink($id),
@@ -98,3 +97,4 @@ class Page
         return $page;
     }
 }
+

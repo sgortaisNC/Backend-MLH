@@ -67,7 +67,7 @@ class Options
             $ddeb = new DateTime(implode('-', array_reverse(explode('/', $alerteOption['date_debut']))));
             $dfin = new DateTime(implode('-', array_reverse(explode('/', $alerteOption['date_fin']))));
 
-            if($today->format('U') >= $ddeb->format('U') && $today->format('U') <= $dfin->format('U')) {
+            if ($today->format('U') >= $ddeb->format('U') && $today->format('U') <= $dfin->format('U')) {
                 $alerte = [
                     'titre' => $alerteOption['titre'],
                     'contenu' => $alerteOption['contenu'],
@@ -355,5 +355,50 @@ class Options
             'focus' => $focus,
             'biensMap' => $biensMap
         ];
+    }
+
+    static function sitemapXML(): array
+    {
+        $args = [
+            'post_type' => ['page', 'post', 'bien_louer', 'offre_emploi'],
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+        ];
+
+        $query = new WP_Query($args);
+
+        $sitemap = [];
+
+        $correspondance = [
+            "page" => [
+                'frequence' => 'yearly',
+                'priority' => 0.5
+            ],
+            "post" => [
+                'frequence' => 'weekly',
+                'priority' => 0.8
+            ],
+            "bien_louer" => [
+                'frequence' => 'weekly',
+                'priority' => 0.9
+            ],
+            "offre_emploi" => [
+                'frequence' => 'monthly',
+                'priority' => 0.5
+            ]
+        ];
+
+        while ($query->have_posts()) {
+            $query->the_post();
+            $sitemap[] = [
+                'url' => get_permalink(),
+                'lastModified' => date('Y-m-d\TH:i:s.v\Z', strtotime(get_the_date('Y-m-d'))),
+                'changeFrequency' => $correspondance[get_post_type()]['frequence'],
+                'priority' => $correspondance[get_post_type()]['priority']
+            ];
+
+        }
+
+        return $sitemap;
     }
 }
